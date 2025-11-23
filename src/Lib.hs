@@ -1,8 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards   #-}
 
-module Lib (Resume, Intro, Block, Flat, Line, Parser, parser) where
+module Lib (Resume, Intro, Block, Flat, Line, Parser) where
 
+import Data.Char (isAlphaNum)
 import Data.Text (Text)
 import Data.Void
 import Text.Megaparsec hiding (State)
@@ -38,17 +39,15 @@ data Flat = Flat
   }
   deriving (Eq, Show)
 
-data Line = Section Text | B Block | Dot Text | F Flat
+data Section = Section Text
+  deriving (Eq, Show)
+
+data Dot     = Dot Text
+  deriving (Eq, Show)
+
+data Line = S Section | B Block | D Dot | F Flat
   deriving (Eq, Show)
 
 type Parser = Parsec Void Text
-
-parser :: Parser Intro
-parser = do 
-  title  <- fmap T.pack $ char '#' *> hspace *> some alphaNumChar <* hspace
-  newline
-  traits <- (fmap . fmap) T.pack $ (hspace *> many alphaNumChar <* hspace) `sepBy` "|" 
-  return Intro {..}
-
 
   
