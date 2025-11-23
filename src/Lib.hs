@@ -50,4 +50,15 @@ data Line = S Section | B Block | D Dot | F Flat
 
 type Parser = Parsec Void Text
 
-  
+parseNot :: Char -> Parser Text
+parseNot c = 
+  takeWhileP Nothing (\x -> x /= c && x /= '\n') 
+
+parseLine :: Parser Text
+parseLine = 
+  takeWhile1P Nothing (/= '\n') 
+
+parseSep :: Char -> Parser [Text]
+parseSep c = 
+  (fmap . fmap) T.strip $ (parseNot '|') `sepBy` char c 
+
