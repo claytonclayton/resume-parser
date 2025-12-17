@@ -28,11 +28,20 @@ data Intro = Intro
   deriving (Eq, Show)
 
 data BlockTraits = BlockTraits
-  { topRight :: Text
+  { topLeft  :: Text 
+  , topRight :: Text
   , botLeft  :: Text
   , botRight :: Text
   }
   deriving (Eq, Show)
+
+defaultBlockTraits :: BlockTraits
+defaultBlockTraits = BlockTraits
+  { topLeft  = "" 
+  , topRight = "" 
+  , botLeft  = "" 
+  , botRight = "" 
+  }
 
 data Block = Block
   { blockTitle  :: Text
@@ -84,17 +93,19 @@ parseDot :: Parser Dot
 parseDot = 
   fmap Dot $ char '-' *> hspace *> parseChars
 
+-- have error message include the number of found '|'
 parseBlockTraits :: Parser (Maybe BlockTraits)
 parseBlockTraits =
   optional $ do
     char '+'
     line <- parseSep '|'
-    when (length line /= 3) $ do
-      fail "blockTraits requires two '|'"
-    let topRight = line !! 0 
-        botLeft  = line !! 1
-        botRight = line !! 2
-    return BlockTraits {..}
+    traits <- case line of
+         [a]          -> return defaultBlockTraits {topRight = a}
+         [a, b]       -> return defaultBlockTraits {topLeft = a, topRight = b}
+         [a, b, c]    -> return defaultBlockTraits {topRight = a, botLeft = b, botRight = c}
+         [a, b, c, d] -> return defaultBlockTraits {topLeft = a, topRight = b, botLeft = c, botRight = d}
+         _            -> fail "blockTraits requires 0-3 '|'"
+    return traits
 
 parseBlock :: Parser Block
 parseBlock = do
