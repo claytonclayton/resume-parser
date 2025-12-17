@@ -49,6 +49,18 @@ data Block = Block
   }
   deriving (Eq, Show)
 
+data SubBlock = SubBlock
+  { left  :: Text
+  , right :: Text
+  } 
+  deriving (Eq, Show)
+
+defaultSubBlock :: SubBlock
+defaultSubBlock = SubBlock
+  { left  = "" 
+  , right = "" 
+  }
+
 data Flat = Flat
   { flatTitle  :: Text
   , flatRest   :: Text
