@@ -11,7 +11,6 @@ import Text.Megaparsec hiding (State)
 import Text.Megaparsec.Char
 import qualified Data.Text as T
 import Control.Monad (void)
-import Data.Function ((&))
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
@@ -20,7 +19,12 @@ data Resume = Resume
   { intro      :: Intro 
   , lines      :: [Line]
   }
-  deriving (Eq, Show)
+  deriving (Eq)
+
+instance Show Resume where
+  show (Resume intro' lines') =
+    show intro' ++ "\n"  
+    ++ unlines (fmap show lines') 
 
 data Intro = Intro
   { title      :: Text
@@ -150,8 +154,8 @@ parseFlat = do
 parseLine :: Parser Line
 parseLine = 
   choice $ fmap try
-  [ S  <$> parseSection
-  , B  <$> parseBlock  
+  [ B  <$> parseBlock  
+  , S  <$> parseSection
   , SB <$> parseSubBlock
   , D  <$> parseDot
   , F  <$> parseFlat
