@@ -87,7 +87,7 @@ parseDot =
 parseBlockTraits :: Parser (Maybe BlockTraits)
 parseBlockTraits =
   optional $ do
-    string "+ "
+    char '+'
     line <- parseSep '|'
     when (length line /= 3) $ do
       fail "blockTraits requires two '|'"
@@ -107,9 +107,6 @@ parseLine :: Parser Line
 parseLine = do
   section <- parseSection
   return $ S section
-
-parseDot :: Parser Dot
-parseDot = undefined
 
 -- many "\n" inefficient?
 parseResume :: Parser Resume
