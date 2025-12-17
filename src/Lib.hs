@@ -11,6 +11,7 @@ import Text.Megaparsec hiding (State)
 import Text.Megaparsec.Char
 import qualified Data.Text as T
 import Control.Monad (void)
+import Data.Function ((&))
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
@@ -62,7 +63,7 @@ defaultSubBlock = SubBlock
   }
 
 data Flat = Flat
-  { flatTitle  :: Text
+  { flatTitle  :: Maybe Text
   , flatRest   :: Text
   }
   deriving (Eq, Show)
@@ -136,20 +137,31 @@ parseBlock = do
   blockTraits <- parseBlockTraits
   return Block {..}
 
+parseFlat :: Parser Flat
+parseFlat = do
+  line <- parseChars 
+  let (a, b) = T.span ((/=) ':') line 
+      (flatTitle, flatRest) = 
+        case b of
+          "" -> (Nothing, a)
+          _  -> (Just a, b)
+  return Flat {..}
+
 parseLine :: Parser Line
-parseLine = do
-  section <- parseSection
-  return $ S section
+parseLine = 
+  choice $ fmap try
+  [ S  <$> parseSection
+  , B  <$> parseBlock  
+  , SB <$> parseSubBlock
+  , D  <$> parseDot
+  , F  <$> parseFlat
+  ]
 
 -- many "\n" inefficient?
 parseResume :: Parser Resume
 parseResume = do
   intro <- parseIntro
   many "\n"
-  sec   <- fmap S parseSection
-  newline
-  block <- fmap B parseBlock  
-  let lines = [sec, block]
+  lines <- many $ parseLine <* many "\n" 
   return Resume {..}
-
 
