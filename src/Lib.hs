@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards   #-}
 
-module Lib (Resume, Intro, Block, Flat, Line, Parser, parseResume, parseSep) where
+module Lib (Resume, Intro, Block, SubBlock, Flat, Line, Parser, parseResume, parseSep) where
 
 import Control.Monad (when) 
 import Data.Char (isAlphaNum)
@@ -73,7 +73,7 @@ data Section = Section Text
 data Dot     = Dot Text
   deriving (Eq, Show)
 
-data Line = S Section | B Block | D Dot | F Flat
+data Line = S Section | B Block | SB SubBlock | D Dot | F Flat
   deriving (Eq, Show)
 
 type Parser = Parsec Void Text
@@ -118,6 +118,16 @@ parseBlockTraits =
          [a, b, c, d] -> return defaultBlockTraits {topLeft = a, topRight = b, botLeft = c, botRight = d}
          _            -> fail "blockTraits requires 0-3 '|'"
     return traits
+
+parseSubBlock :: Parser SubBlock
+parseSubBlock = do
+  char '+'
+  line <- parseSep '|'
+  subBlock <- case line of
+       [a]          -> return defaultSubBlock {left = a}
+       [a, b]       -> return defaultSubBlock {left = a, right = b}
+       _            -> fail "blockTraits requires 0-1 '|'"
+  return subBlock
 
 parseBlock :: Parser Block
 parseBlock = do
