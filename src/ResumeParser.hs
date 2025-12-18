@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards   #-}
 
-module ResumeParser (Resume, Intro, Block, SubBlock, Flat, Line, Parser, parseResume, parseSep) where
+module ResumeParser (ResumeADT, Intro, Block, SubBlock, Flat, Line, Parser, parseResume, parseSep) where
 
 import Control.Monad (when) 
 import Data.Char (isAlphaNum)
@@ -15,14 +15,14 @@ import Control.Monad (void)
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
 
-data Resume = Resume
+data ResumeADT = ResumeADT
   { intro      :: Intro 
   , lines      :: [Line]
   }
   deriving (Eq)
 
-instance Show Resume where
-  show (Resume intro' lines') =
+instance Show ResumeADT where
+  show (ResumeADT intro' lines') =
     show intro' ++ "\n"  
     ++ unlines (fmap show lines') 
 
@@ -162,10 +162,10 @@ parseLine =
   ]
 
 -- many "\n" inefficient?
-parseResume :: Parser Resume
+parseResume :: Parser ResumeADT
 parseResume = do
   intro <- parseIntro
   many "\n"
   lines <- many $ parseLine <* many "\n" 
-  return Resume {..}
+  return ResumeADT {..}
 
