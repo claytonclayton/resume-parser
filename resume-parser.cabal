@@ -25,7 +25,7 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
+      ResumeParser
   other-modules:
       Paths_resume_parser
   autogen-modules:
