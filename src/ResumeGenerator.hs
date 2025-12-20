@@ -5,7 +5,11 @@ import ResumeParser (ResumeADT(ResumeADT), Intro, Section(Section), Block(Block)
 import Data.Text (Text)
 import qualified Data.Text as T
 
-data ResumeTex = ResumeTex [Text]
+type ResumeTex = [Text]
+
+generateTex :: ResumeADT -> ResumeTex
+generateTex (ResumeADT intro lines) =
+  fmap convertLine lines 
 
 convertLine :: Line -> Text
 convertLine l = 
