@@ -29,9 +29,24 @@ convertLine l =
     (F f)  -> convertFlat f 
     (B b)  -> convertBlock b 
 
+convertLines :: [Line] -> [Text]
+convertLines []     = []
+convertLines (l:ls) = 
+  case l of
+    (D d)  -> convertDot' d ls
 
 convertDot :: Dot -> Text
 convertDot (Dot d) = "\\Dot{" <> d <> "}"
+
+convertDot' :: Dot -> [Line] -> [Text]
+convertDot' (Dot d) []     = []
+convertDot' (Dot d) (l:ls) = 
+  let rest = 
+        case l of
+          (D _) -> convertLines (l:ls)
+          _     -> ("\\DotEnd"):(convertLines (l:ls))
+  in ("\\Dot{" <> d <> "}"):rest
+
 
 convertSection :: Section -> Text
 convertSection (Section s) = "\\section{" <> s <> "}"
