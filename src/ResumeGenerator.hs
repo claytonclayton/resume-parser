@@ -1,4 +1,6 @@
-
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RecordWildCards   #-}
+ 
 module ResumeGenerator () where
 
 import ResumeParser (ResumeADT(ResumeADT), Intro, Section(Section), Block(Block), SubBlock(SubBlock), Dot(Dot), Flat(Flat), Line(B, SB, S, F, D)) 
@@ -18,4 +20,5 @@ convertLine l =
     (S s)  -> undefined
 
 convertDot :: Dot -> Text
-convertDot (Dot d) = undefined
+convertDot (Dot d) = "\\Dot{" <> d <> "}"
+
