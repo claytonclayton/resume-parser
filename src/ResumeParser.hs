@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards   #-}
 
-module ResumeParser (ResumeADT(ResumeADT), Intro, Section(Section), Block(Block), SubBlock(SubBlock), Dot(Dot), Flat(Flat), Line(S, SB, D, F, B), Parser, parseResume, parseSep) where
+module ResumeParser (ResumeADT(ResumeADT), Intro, Section(Section), Block(Block), SubBlock(SubBlock), Dot(Dot), Flat(Flat), Line(S, SB, D, F, B, I), Parser, parseResume, parseSep) where
 
 import Control.Monad (when) 
 import Data.Char (isAlphaNum)
