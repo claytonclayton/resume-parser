@@ -127,7 +127,7 @@ parseSubBlock = do
   subBlock <- case line of
        [a]          -> return defaultSubBlock {left = a}
        [a, b]       -> return defaultSubBlock {left = a, right = b}
-       _            -> fail "blockTraits requires 0-1 '|'"
+       _            -> fail "subBlockTraits requires 0-1 '|'"
   return subBlock
 
 parseBlock :: Parser Block
