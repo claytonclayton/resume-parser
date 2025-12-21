@@ -15,16 +15,12 @@ import Control.Monad (void)
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
 
-data ResumeADT = ResumeADT
-  { intro      :: Intro 
-  , lines      :: [Line]
-  }
+data ResumeADT = ResumeADT [Line]
   deriving (Eq)
 
 instance Show ResumeADT where
-  show (ResumeADT intro' lines') =
-    show intro' ++ "\n"  
-    ++ unlines (fmap show lines') 
+  show (ResumeADT lines) =
+    unlines (fmap show lines) 
 
 data Intro = Intro
   { title      :: Text
@@ -78,7 +74,7 @@ data Section = Section Text
 data Dot     = Dot Text
   deriving (Eq, Show)
 
-data Line = S Section | B Block | SB SubBlock | D Dot | F Flat
+data Line = I Intro | S Section | B Block | SB SubBlock | D Dot | F Flat
   deriving (Eq, Show)
 
 type Parser = Parsec Void Text
@@ -156,6 +152,7 @@ parseLine =
   choice $ fmap try
   [ B  <$> parseBlock  
   , S  <$> parseSection
+  , I  <$> parseIntro
   , SB <$> parseSubBlock
   , D  <$> parseDot
   , F  <$> parseFlat
@@ -164,8 +161,7 @@ parseLine =
 -- many "\n" inefficient?
 parseResume :: Parser ResumeADT
 parseResume = do
-  intro <- parseIntro
   many "\n"
   lines <- many $ parseLine <* many "\n" 
-  return ResumeADT {..}
+  return $ ResumeADT lines
 
