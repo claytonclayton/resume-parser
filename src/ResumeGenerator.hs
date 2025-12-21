@@ -17,8 +17,10 @@ convertLine :: Line -> Text
 convertLine l = 
   case l of
     (D d)  -> convertDot d
-    (S s)  -> undefined
+    (S s)  -> convertSection s
 
 convertDot :: Dot -> Text
 convertDot (Dot d) = "\\Dot{" <> d <> "}"
 
+convertSection :: Section -> Text
+convertSection (Section s) = "\\section{" <> s <> "}"
