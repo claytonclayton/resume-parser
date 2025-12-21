@@ -7,11 +7,17 @@ import ResumeParser (ResumeADT(ResumeADT), Intro, Section(Section), Block(Block)
 import Data.Text (Text)
 import qualified Data.Text as T
 
-type ResumeTex = [Text]
+data ResumeTex = ResumeTex [Text]
+  deriving (Eq)
+
+-- better to write a separate function that outputs Text rather than String
+instance Show ResumeTex where
+  show (ResumeTex lines) = 
+    T.unpack $ T.unlines lines 
 
 generateTex :: ResumeADT -> ResumeTex
 generateTex (ResumeADT lines) =
-  fmap convertLine lines 
+  ResumeTex $ fmap convertLine lines 
 
 convertLine :: Line -> Text
 convertLine l = 
@@ -31,13 +37,13 @@ convertSection :: Section -> Text
 convertSection (Section s) = "\\section{" <> s <> "}"
 
 convertIntro :: Intro -> Text
-convertIntro = undefined
+convertIntro i = ""
 
 convertSubBlock :: SubBlock -> Text
-convertSubBlock = undefined
+convertSubBlock b = ""
 
 convertFlat :: Flat -> Text
-convertFlat = undefined
+convertFlat f = ""
 
 convertBlock :: Block -> Text
-convertBlock = undefined
+convertBlock b = ""
