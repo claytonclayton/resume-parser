@@ -164,15 +164,14 @@ parseLine :: Parser Line
 parseLine = do
    pos <- getSourcePos
    choice $ fmap try
-    [ makePos PosBlock pos parseBlock
-    , makePos PosSection pos parseSection
-    , makePos PosIntro pos parseIntro
+    [ makePos PosBlock    pos parseBlock
+    , makePos PosSection  pos parseSection
+    , makePos PosIntro    pos parseIntro
     , makePos PosSubBlock pos parseSubBlock
-    , makePos PosDot pos parseDot
-    , makePos PosFlat pos parseFlat
+    , makePos PosDot      pos parseDot
+    , makePos PosFlat     pos parseFlat
     ] 
    where makePos f pos p = f . (Positioned pos) <$> p 
- 
 
 -- many "\n" inefficient?
 parseResume :: Parser ResumeADT
