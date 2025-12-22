@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards   #-}
 
-module ResumeParser (ResumeADT(ResumeADT), Intro, Section(Section), Block(Block), SubBlock(SubBlock), Dot(Dot), Flat(Flat), Line(S, SB, D, F, B, I), Parser, parseResume, parseSep, Positioned(Positioned, value, pos), Line'(PosSection, PosSubBlock, PosBlock, PosDot, PosFlat, PosIntro)) where
+module ResumeParser (ResumeADT(ResumeADT), Intro, Section(Section, sectionTitle), Block(Block), SubBlock(SubBlock), Dot(Dot), Flat(Flat), Parser, parseResume, parseSep, Line(PosSection, PosSubBlock, PosBlock, PosDot, PosFlat, PosIntro), Positioned(getPos, getValue)) where
 
 import Control.Monad (when) 
 import Data.Char (isAlphaNum)
@@ -15,7 +15,7 @@ import Control.Monad (void)
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
 
-data ResumeADT = ResumeADT [Line']
+data ResumeADT = ResumeADT [Line]
   deriving (Eq)
 
 instance Show ResumeADT where
@@ -68,22 +68,20 @@ data Flat = Flat
   }
   deriving (Eq, Show)
 
-data Section = Section Text
+data Section = Section
+  { sectionTitle :: Text } 
   deriving (Eq, Show)
 
 data Dot     = Dot Text
   deriving (Eq, Show)
 
-data Line = I Intro | S Section | B Block | SB SubBlock | D Dot | F Flat
-  deriving (Eq, Show)
-
 data Positioned a = Positioned
-  { pos   :: SourcePos
-  , value :: a
+  { getPos   :: SourcePos
+  , getValue :: a
   } 
   deriving (Eq, Show)
 
-data Line' =
+data Line =
     PosIntro (Positioned Intro)
   | PosSection  (Positioned Section)
   | PosBlock (Positioned Block)
@@ -163,18 +161,7 @@ parseFlat = do
   return Flat {..}
 
 parseLine :: Parser Line
-parseLine = 
-  choice $ fmap try
-  [ B  <$> parseBlock  
-  , S  <$> parseSection
-  , I  <$> parseIntro
-  , SB <$> parseSubBlock
-  , D  <$> parseDot
-  , F  <$> parseFlat
-  ]
-
-parseLine' :: Parser Line'
-parseLine' = do
+parseLine = do
    pos <- getSourcePos
    choice $ fmap try
     [ makePos PosBlock pos parseBlock
@@ -184,14 +171,13 @@ parseLine' = do
     , makePos PosDot pos parseDot
     , makePos PosFlat pos parseFlat
     ] 
-
-makePos :: (Positioned a -> Line') -> SourcePos -> Parser a -> Parser Line' 
-makePos f pos p = f . (Positioned pos) <$> p 
+   where makePos f pos p = f . (Positioned pos) <$> p 
+ 
 
 -- many "\n" inefficient?
 parseResume :: Parser ResumeADT
 parseResume = do
   many "\n"
-  lines <- many $ parseLine' <* many "\n" 
+  lines <- many $ parseLine <* many "\n" 
   return $ ResumeADT lines
 
