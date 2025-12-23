@@ -4,7 +4,6 @@
 module ResumeGrouper () where
 
 import ResumeParser (ResumeADT(ResumeADT), Intro, Section(Section, sectionTitle), Block(Block), SubBlock(SubBlock), Dot(Dot), Flat(Flat), Line(PosSection, PosSubBlock, PosBlock, PosDot, PosFlat, PosIntro), Positioned(getPos, getValue)) 
-
 import Data.Text (Text)
 import qualified Data.Text as T
 
@@ -24,21 +23,29 @@ data BlockAST = BlockAST
  
 data LineAST = Ff Flat | Dd Dot | Sb SubBlock
 
-data GroupError = GroupError
+data GroupError
+  = DotOutsideBlock
+  | FlatOutsideBlock
+  | SubBlockOutsideBlock
 
 groupResume :: ResumeADT -> ResumeAST
 groupResume = undefined
 
-groupLines :: [Line] -> Either GroupError ([Line], [LineAST])
-groupLines [] = undefined 
-  
+dotCheck :: [Line] -> Either GroupError ()
+dotCheck (PosDot d : ls)      = Left DotOutsideBlock
+dotCheck (PosFlat f : ls)     = Left FlatOutsideBlock
+dotCheck (PosSubBlock s : ls) = Left SubBlockOutsideBlock
+dotCheck _ = Right ()
+
 groupSections :: [Line] -> Either GroupError ([Line], [SectionAST])
-groupSections [] = Right $ ([], []) 
 groupSections (PosSection s : ls) = do
+  dotCheck ls
   let section = getValue s
   (rem1, blocks)   <- groupBlocks ls 
   (rem2, sections) <- groupSections rem1
   return (rem2, SectionAST section blocks : sections)
+groupSections [] = Right $ ([], []) 
+groupSections _  = Right $ ([], []) 
   
 groupBlocks :: [Line] -> Either GroupError ([Line], [BlockAST])
 groupBlocks [] = Right $ ([], []) 
@@ -48,3 +55,17 @@ groupBlocks (PosBlock b : ls) = do
   (rem2, blocks) <- groupBlocks rem1
   return (rem2, BlockAST block lines : blocks)
 
+groupLines :: [Line] -> Either GroupError ([Line], [LineAST])
+groupLines [] = Right ([], [])
+groupLines (PosDot d : ls) = do
+  let dot = getValue d
+  (rem, lines) <- groupLines ls
+  return (rem, Dd dot : lines) 
+groupLines (PosFlat f : ls) = do
+  let flat = getValue f 
+  (rem, lines) <- groupLines ls
+  return (rem, Ff flat: lines) 
+groupLines (PosSubBlock sb : ls) = do
+  let subBlock = getValue sb 
+  (rem, lines) <- groupLines ls
+  return (rem, Sb subBlock : lines) 
