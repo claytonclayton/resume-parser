@@ -31,7 +31,6 @@ groupResume = undefined
 
 groupLines :: [Line] -> Either GroupError ([Line], [LineAST])
 groupLines [] = undefined 
-groupDots (l:ls) = undefined
   
 groupSections :: [Line] -> Either GroupError ([Line], [SectionAST])
 groupSections [] = Right $ ([], []) 
@@ -42,5 +41,10 @@ groupSections (PosSection s : ls) = do
   return (rem2, SectionAST section blocks : sections)
   
 groupBlocks :: [Line] -> Either GroupError ([Line], [BlockAST])
-groupBlocks = undefined
+groupBlocks [] = Right $ ([], []) 
+groupBlocks (PosBlock b : ls) = do
+  let block = getValue b 
+  (rem1, lines)  <- groupLines ls 
+  (rem2, blocks) <- groupBlocks rem1
+  return (rem2, BlockAST block lines : blocks)
 
