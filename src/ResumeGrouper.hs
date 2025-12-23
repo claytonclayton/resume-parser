@@ -6,9 +6,10 @@ module ResumeGrouper () where
 import ResumeParser (ResumeADT(ResumeADT), Intro, Section(Section, sectionTitle), Block(Block), SubBlock(SubBlock), Dot(Dot), Flat(Flat), Line(PosSection, PosSubBlock, PosBlock, PosDot, PosFlat, PosIntro), Positioned(getPos, getValue)) 
 import Data.Text (Text)
 import qualified Data.Text as T
+import Control.Monad (when)
 
 data ResumeAST = ResumeAST
-  { intro    :: Intro
+  { intro    :: Maybe Intro
   , sections :: [SectionAST]
   } 
 
@@ -27,10 +28,24 @@ data GroupError
   = DotOutsideBlock
   | FlatOutsideBlock
   | SubBlockOutsideBlock
+  | SomethingOutsideBlock -- should never occur
+  | RemainingLines
 
-groupResume :: ResumeADT -> ResumeAST
-groupResume = undefined
-
+groupResumes :: [Line] -> Either GroupError ([Line], [ResumeAST])
+groupResumes ls = do
+  case ls of
+    (PosIntro i : ls)   -> ret ls $ Just $ getValue i
+    (PosSection s : ls) -> ret ls Nothing
+    [] -> return ([], [])
+    _  -> Left SomethingOutsideBlock 
+  where 
+    ret ls intro = do
+      dotCheck ls
+      (rem1, sections) <- groupSections ls
+      (rem2, res)      <- groupResumes rem1
+      when (length rem2 /= 0) $ Left RemainingLines 
+      return (rem2, ResumeAST intro sections : res)
+  
 dotCheck :: [Line] -> Either GroupError ()
 dotCheck (PosDot d : ls)      = Left DotOutsideBlock
 dotCheck (PosFlat f : ls)     = Left FlatOutsideBlock
