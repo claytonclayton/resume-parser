@@ -44,19 +44,19 @@ groupSections (PosSection s : ls) = do
   (rem1, blocks)   <- groupBlocks ls 
   (rem2, sections) <- groupSections rem1
   return (rem2, SectionAST section blocks : sections)
-groupSections [] = Right $ ([], []) 
-groupSections _  = Right $ ([], []) 
+groupSections [] = Right ([], []) 
+groupSections _  = Right ([], []) 
   
 groupBlocks :: [Line] -> Either GroupError ([Line], [BlockAST])
-groupBlocks [] = Right $ ([], []) 
 groupBlocks (PosBlock b : ls) = do
   let block = getValue b 
   (rem1, lines)  <- groupLines ls 
   (rem2, blocks) <- groupBlocks rem1
   return (rem2, BlockAST block lines : blocks)
+groupBlocks [] = Right ([], []) 
+groupBlocks _ =  Right ([], []) 
 
 groupLines :: [Line] -> Either GroupError ([Line], [LineAST])
-groupLines [] = Right ([], [])
 groupLines (PosDot d : ls) = do
   let dot = getValue d
   (rem, lines) <- groupLines ls
@@ -69,3 +69,5 @@ groupLines (PosSubBlock sb : ls) = do
   let subBlock = getValue sb 
   (rem, lines) <- groupLines ls
   return (rem, Sb subBlock : lines) 
+groupLines [] = Right ([], [])
+groupLines _  = Right ([], [])
