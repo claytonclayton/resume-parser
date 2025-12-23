@@ -45,8 +45,7 @@ groupResumes' ls = do
   case ls of
     (PosIntro i : ls)   -> ret ls $ Just $ getValue i
     (PosSection s : ls) -> ret ls Nothing
-    [] -> return ([], [])
-    _  -> return ([], [])
+    ls -> return (ls, [])
   where 
     ret ls intro = do
       dotCheck ls
@@ -95,3 +94,4 @@ groupLines (PosSubBlock sb : ls) = do
   return (rem, Sb subBlock : lines) 
 groupLines [] = Right ([], [])
 groupLines ls = Right (ls, [])
+
