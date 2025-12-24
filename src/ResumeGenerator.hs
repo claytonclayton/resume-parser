@@ -1,22 +1,30 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards   #-}
  
-module ResumeGenerator (generateResume) where
+module ResumeGenerator (generateResumes) where
 
-import ResumeParser (ResumeADT(ResumeADT), Intro, Section(Section), Block(Block), SubBlock(SubBlock), Dot(Dot), Flat(Flat), Line(PosSection, PosSubBlock, PosBlock, PosDot, PosFlat, PosIntro)) 
-import ResumeGrouper (ResumeAST(ResumeAST), SectionAST(SectionAST), BlockAST(BlockAST))
+import ResumeParser (ResumeADT(ResumeADT), Intro, Section(Section), Block(Block, blockTitle, blockTraits), SubBlock(SubBlock), Dot(Dot), Flat(Flat), Line(PosSection, PosSubBlock, PosBlock, PosDot, PosFlat, PosIntro), BlockTraits(topLeft, topRight, botLeft, botRight)) 
+import ResumeGrouper (ResumeAST(ResumeAST), SectionAST(SectionAST), BlockAST(BlockAST), LineAST(Ff, Dd, Sb))
 import Data.Text (Text)
 import qualified Data.Text as T
 
 data ResumeTex = ResumeTex [Text]
   deriving (Eq)
 
--- instance Show ResumeTex where
---   show (ResumeTex lines) = 
---     T.unpack $ T.unlines lines 
+instance Show ResumeTex where
+  show (ResumeTex lines) = 
+    T.unpack $ T.unlines lines 
 
-generateResume :: ResumeAST -> ResumeTex
-generateResume (ResumeAST i s) = undefined
+link :: [a] -> (a -> [Text] -> [Text]) -> [Text] -> [Text]
+link as f = foldl (.) id $ f <$> as 
+
+generateResumes :: [ResumeAST] -> ResumeTex
+generateResumes rs = ResumeTex $ link rs generateResume []
+ 
+generateResume :: ResumeAST -> [Text] -> [Text]
+generateResume (ResumeAST i ss)
+  = (generateIntro i) 
+  . (link ss generateSection)
 
 generateIntro :: Maybe Intro -> [Text] -> [Text]
 generateIntro i = ("":) 
@@ -25,21 +33,20 @@ generateSection :: SectionAST -> [Text] -> [Text]
 generateSection (SectionAST (Section s) bs) 
   = ("\\section{" <> s <> "}" :) 
   . ("\\SectionStart" :) 
-  . (generateBlocks bs) 
-  . ("\\SectionEnd":)
+  . (link bs generateBlock) 
+  . ("\\SectionEnd" :)
 
-generateBlocks :: [BlockAST] -> [Text] -> [Text]
-generateBlocks = undefined
+generateBlock :: BlockAST -> [Text] -> [Text]
+generateBlock (BlockAST b ls) = 
+  let title  = blockTitle b
+      traits = blockTraits b 
+      tl     = topLeft traits
+      tr     = topRight traits
+      bl     = botLeft traits
+      br     = botRight traits
+  in ("\\Block{" <> title <> "}[" <> tl <> "][" <> tr <> "][" <> bl <> "][" <> br  <>" ]":)
+   . (generateLines ls)
 
-generateBlock :: Block -> Text
-generateBlock b = ""
-
-generateDot :: Dot -> Text
-generateDot (Dot d) = "\\Dot{" <> d <> "}"
-
-generateSubBlock :: SubBlock -> Text
-generateSubBlock b = ""
-
-generateFlat :: Flat -> Text
-generateFlat f = ""
+generateLines :: [LineAST] -> [Text] -> [Text]
+generateLines ls = ("":) 
 

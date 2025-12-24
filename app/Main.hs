@@ -3,7 +3,8 @@ module Main (main) where
 
 import Text.Megaparsec (runParser, errorBundlePretty)
 import ResumeParser  (parseResume)
-import ResumeGrouper (groupResumes)
+import ResumeGrouper (groupResumes, ResumeAST)
+import ResumeGenerator (generateResumes)
 import qualified Data.Text.IO as TIO
 import qualified Data.Text as T
 
@@ -12,7 +13,12 @@ main = do
   md <- TIO.readFile "resume.md"
   let lint     = T.unlines $ fmap T.strip $ T.lines md
       parseOut = runParser parseResume "" lint 
+  print parseOut
   case parseOut of 
     Left  bundle -> putStr $ errorBundlePretty bundle
-    Right adt   -> print $ groupResumes adt
+    Right adt    -> 
+      case groupResumes adt of
+        Left ge ->          print ge
+        Right (ls, ast ) -> print $ generateResumes ast
+
 

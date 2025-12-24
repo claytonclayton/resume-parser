@@ -1,9 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards   #-}
  
-module ResumeGrouper (groupResumes, ResumeAST(ResumeAST), SectionAST(SectionAST), BlockAST(BlockAST), LineAST) where
+module ResumeGrouper (groupResumes, ResumeAST(ResumeAST), SectionAST(SectionAST), BlockAST(BlockAST), LineAST(Ff, Dd, Sb)) where
 
-import ResumeParser (ResumeADT(ResumeADT), Intro, Section(Section, sectionTitle), Block(Block), SubBlock(SubBlock), Dot(Dot), Flat(Flat), Line(PosSection, PosSubBlock, PosBlock, PosDot, PosFlat, PosIntro), Positioned(getPos, getValue)) 
+import ResumeParser (ResumeADT(ResumeADT), Intro, Section(Section, sectionTitle), Block(Block), BlockTraits(topLeft, topRight, botLeft, botRight), SubBlock(SubBlock), Dot(Dot), Flat(Flat), Line(PosSection, PosSubBlock, PosBlock, PosDot, PosFlat, PosIntro), Positioned(getPos, getValue)) 
 import Data.Text (Text)
 import qualified Data.Text as T
 import Control.Monad (when)
@@ -51,7 +51,7 @@ groupResumes' ls = do
       dotCheck ls
       (rem1, sections) <- groupSections ls
       (rem2, res)      <- groupResumes' rem1
-      when (length rem2 /= 0) $ Left RemainingLines 
+      when (length rem2 /= 0) $ Left RemainingLines
       return (rem2, ResumeAST intro sections : res)
   
 dotCheck :: [Line] -> Either GroupError ()
@@ -60,6 +60,7 @@ dotCheck (PosFlat f : ls)     = Left FlatOutsideBlock
 dotCheck (PosSubBlock s : ls) = Left SubBlockOutsideBlock
 dotCheck _ = Right ()
 
+-- consider rewriting with State monad
 groupSections :: [Line] -> Either GroupError ([Line], [SectionAST])
 groupSections (PosSection s : ls) = do
   dotCheck ls

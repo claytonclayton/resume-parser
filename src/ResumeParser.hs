@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards   #-}
 
-module ResumeParser (ResumeADT(ResumeADT), Intro, Section(Section, sectionTitle), Block(Block), SubBlock(SubBlock), Dot(Dot), Flat(Flat), Parser, parseResume, parseSep, Line(PosSection, PosSubBlock, PosBlock, PosDot, PosFlat, PosIntro), Positioned(getPos, getValue)) where
+module ResumeParser (ResumeADT(ResumeADT), Intro, Section(Section, sectionTitle), Block(Block, blockTitle, blockTraits), BlockTraits(topLeft, topRight, botLeft, botRight), SubBlock(SubBlock), Dot(Dot), Flat(Flat), Parser, parseResume, parseSep, Line(PosSection, PosSubBlock, PosBlock, PosDot, PosFlat, PosIntro), Positioned(getPos, getValue)) where
 
 import Control.Monad (when) 
 import Data.Char (isAlphaNum)
@@ -43,7 +43,7 @@ defaultBlockTraits = BlockTraits
 
 data Block = Block
   { blockTitle  :: Text
-  , blockTraits :: Maybe BlockTraits
+  , blockTraits :: BlockTraits
   }
   deriving (Eq, Show)
 
@@ -117,9 +117,9 @@ parseDot =
   fmap Dot $ char '-' *> hspace *> parseChars
 
 -- have error message include the number of found '|'
-parseBlockTraits :: Parser (Maybe BlockTraits)
-parseBlockTraits =
-  optional $ do
+parseBlockTraits :: Parser BlockTraits
+parseBlockTraits = do
+  try $ do 
     char '+'
     line <- parseSep '|'
     traits <- case line of
@@ -129,6 +129,7 @@ parseBlockTraits =
          [a, b, c, d] -> return defaultBlockTraits {topLeft = a, topRight = b, botLeft = c, botRight = d}
          _            -> fail "blockTraits requires 0-3 '|'"
     return traits
+  <|> return defaultBlockTraits
 
 parseSubBlock :: Parser SubBlock
 parseSubBlock = do
