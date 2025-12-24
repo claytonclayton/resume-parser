@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards   #-}
  
-module ResumeGrouper (groupResumes) where
+module ResumeGrouper (groupResumes, ResumeAST(ResumeAST), SectionAST(SectionAST), BlockAST(BlockAST), LineAST) where
 
 import ResumeParser (ResumeADT(ResumeADT), Intro, Section(Section, sectionTitle), Block(Block), SubBlock(SubBlock), Dot(Dot), Flat(Flat), Line(PosSection, PosSubBlock, PosBlock, PosDot, PosFlat, PosIntro), Positioned(getPos, getValue)) 
 import Data.Text (Text)
@@ -67,7 +67,6 @@ groupSections (PosSection s : ls) = do
   (rem1, blocks)   <- groupBlocks ls 
   (rem2, sections) <- groupSections rem1
   return (rem2, SectionAST section blocks : sections)
-groupSections [] = Right ([], []) 
 groupSections ls = Right (ls, []) 
   
 groupBlocks :: [Line] -> Either GroupError ([Line], [BlockAST])
@@ -76,7 +75,6 @@ groupBlocks (PosBlock b : ls) = do
   (rem1, lines)  <- groupLines ls 
   (rem2, blocks) <- groupBlocks rem1
   return (rem2, BlockAST block lines : blocks)
-groupBlocks [] = Right ([], []) 
 groupBlocks ls = Right (ls, []) 
 
 groupLines :: [Line] -> Either GroupError ([Line], [LineAST])
@@ -92,6 +90,5 @@ groupLines (PosSubBlock sb : ls) = do
   let subBlock = getValue sb 
   (rem, lines) <- groupLines ls
   return (rem, Sb subBlock : lines) 
-groupLines [] = Right ([], [])
 groupLines ls = Right (ls, [])
 

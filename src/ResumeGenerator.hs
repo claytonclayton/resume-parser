@@ -1,64 +1,45 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards   #-}
  
-module ResumeGenerator (generateTex) where
+module ResumeGenerator (generateResume) where
 
-import ResumeParser (ResumeADT(ResumeADT), Intro, Section(Section), Block(Block), SubBlock(SubBlock), Dot(Dot), Flat(Flat), Line(B, SB, S, F, D, I)) 
+import ResumeParser (ResumeADT(ResumeADT), Intro, Section(Section), Block(Block), SubBlock(SubBlock), Dot(Dot), Flat(Flat), Line(PosSection, PosSubBlock, PosBlock, PosDot, PosFlat, PosIntro)) 
+import ResumeGrouper (ResumeAST(ResumeAST), SectionAST(SectionAST), BlockAST(BlockAST))
 import Data.Text (Text)
 import qualified Data.Text as T
 
 data ResumeTex = ResumeTex [Text]
   deriving (Eq)
 
--- better to write a separate function that outputs Text rather than String
-instance Show ResumeTex where
-  show (ResumeTex lines) = 
-    T.unpack $ T.unlines lines 
+-- instance Show ResumeTex where
+--   show (ResumeTex lines) = 
+--     T.unpack $ T.unlines lines 
 
-generateTex :: ResumeADT -> ResumeTex
-generateTex (ResumeADT lines) =
-  ResumeTex $ fmap convertLine lines 
+generateResume :: ResumeAST -> ResumeTex
+generateResume (ResumeAST i s) = undefined
 
-convertLine :: Line -> Text
-convertLine l = 
-  case l of
-    (D d)  -> convertDot d
-    (S s)  -> convertSection s
-    (I i)  -> convertIntro i 
-    (SB b) -> convertSubBlock b 
-    (F f)  -> convertFlat f 
-    (B b)  -> convertBlock b 
+generateIntro :: Maybe Intro -> [Text] -> [Text]
+generateIntro i = ("":) 
 
-convertLines :: [Line] -> [Text]
-convertLines []     = []
-convertLines (l:ls) = 
-  case l of
-    (D d)  -> convertDot' d ls
+generateSection :: SectionAST -> [Text] -> [Text]
+generateSection (SectionAST (Section s) bs) 
+  = ("\\section{" <> s <> "}" :) 
+  . ("\\SectionStart" :) 
+  . (generateBlocks bs) 
+  . ("\\SectionEnd":)
 
-convertDot :: Dot -> Text
-convertDot (Dot d) = "\\Dot{" <> d <> "}"
+generateBlocks :: [BlockAST] -> [Text] -> [Text]
+generateBlocks = undefined
 
-convertDot' :: Dot -> [Line] -> [Text]
-convertDot' (Dot d) []     = []
-convertDot' (Dot d) (l:ls) = 
-  let rest = 
-        case l of
-          (D _) -> convertLines (l:ls)
-          _     -> ("\\DotEnd"):(convertLines (l:ls))
-  in ("\\Dot{" <> d <> "}"):rest
+generateBlock :: Block -> Text
+generateBlock b = ""
 
+generateDot :: Dot -> Text
+generateDot (Dot d) = "\\Dot{" <> d <> "}"
 
-convertSection :: Section -> Text
-convertSection (Section s) = "\\section{" <> s <> "}"
+generateSubBlock :: SubBlock -> Text
+generateSubBlock b = ""
 
-convertIntro :: Intro -> Text
-convertIntro i = ""
+generateFlat :: Flat -> Text
+generateFlat f = ""
 
-convertSubBlock :: SubBlock -> Text
-convertSubBlock b = ""
-
-convertFlat :: Flat -> Text
-convertFlat f = ""
-
-convertBlock :: Block -> Text
-convertBlock b = ""
