@@ -12,9 +12,6 @@ import Text.Megaparsec.Char
 import qualified Data.Text as T
 import Control.Monad (void)
 
-someFunc :: IO ()
-someFunc = putStrLn "someFunc"
-
 data ResumeADT = ResumeADT [Line]
   deriving (Eq)
 
