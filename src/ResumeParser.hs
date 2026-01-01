@@ -1,7 +1,41 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards   #-}
 
-module ResumeParser (ResumeADT(ResumeADT), Intro, Section(Section, sectionTitle), Block(Block, blockTitle, blockTraits), BlockTraits(topLeft, topRight, botLeft, botRight), SubBlock(SubBlock), Dot(Dot), Flat(Flat), Parser, parseResume, parseSep, Line(PosSection, PosSubBlock, PosBlock, PosDot, PosFlat, PosIntro), Positioned(getPos, getValue)) where
+module ResumeParser 
+  ( ResumeADT(ResumeADT)
+  , Intro
+  , Section(Section
+  , sectionTitle)
+  , SubBlock(SubBlock)
+  , Dot(Dot)
+  , Flat(Flat)
+  , Parser
+  , parseResume
+  , parseSep
+  , Line
+    ( PosSection
+    , PosSubBlock
+    , PosBlock
+    , PosDot
+    , PosFlat
+    , PosIntro
+    )
+  , Positioned
+    ( getPos
+    , getValue
+    )
+  , Block
+    ( Block
+    , blockTitle
+    , blockTraits
+    )
+  , BlockTraits
+    ( topLeft
+    , topRight
+    , botLeft
+    , botRight
+    )
+  ) where
 
 import Control.Monad (when) 
 import Data.Char (isAlphaNum)
@@ -60,7 +94,7 @@ defaultSubBlock = SubBlock
   }
 
 data Flat = Flat
-  { flatTitle  :: Maybe Text
+  { flatTitle  :: Text
   , flatRest   :: Text
   }
   deriving (Eq, Show)
@@ -117,19 +151,16 @@ parseDot =
   fmap Dot $ char '-' *> hspace *> parseChars
 
 -- have error message include the number of found '|'
--- surely there's a cleaner way to write this
 parseBlockTraits :: Parser BlockTraits
-parseBlockTraits = do
-  try $ do 
-    char '+'
-    line <- parseSep '|'
-    traits <- case line of
-         [a]          -> return defaultBlockTraits {topRight = a}
-         [a, b]       -> return defaultBlockTraits {topLeft = a, topRight = b}
-         [a, b, c]    -> return defaultBlockTraits {topRight = a, botLeft = b, botRight = c}
-         [a, b, c, d] -> return defaultBlockTraits {topLeft = a, topRight = b, botLeft = c, botRight = d}
-         _            -> fail "blockTraits requires 0-3 '|'"
-    return traits
+parseBlockTraits = try $ 
+  do char '+'
+     line <- parseSep '|'
+     case line of
+       [a]          -> return defaultBlockTraits {topRight = a}
+       [a, b]       -> return defaultBlockTraits {topLeft = a, topRight = b}
+       [a, b, c]    -> return defaultBlockTraits {topRight = a, botLeft = b, botRight = c}
+       [a, b, c, d] -> return defaultBlockTraits {topLeft = a, topRight = b, botLeft = c, botRight = d}
+       _            -> fail "blockTraits requires 0-3 '|'"
   <|> return defaultBlockTraits
 
 parseSubBlock :: Parser SubBlock
@@ -155,8 +186,8 @@ parseFlat = do
   let (a, b) = T.span ((/=) ':') line 
       (flatTitle, flatRest) = 
         case b of
-          "" -> (Nothing, a)
-          _  -> (Just a, b)
+          "" -> ("", a)
+          _  -> (a, b)
   return Flat {..}
 
 parseLine :: Parser Line
