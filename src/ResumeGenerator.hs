@@ -32,12 +32,11 @@ outFilename = "out.tex"
 
 printResumes :: [ResumeAST] -> IO ()
 printResumes rs = do
-  let tex = generateResumes rs
   prefix <- readFile prefixFilename 
-  writeFile  outFilename prefix
-  appendFile outFilename $ show tex
-  print prefix
-  print tex  
+  let tex = generateResumes rs
+      out = prefix <> show tex
+  writeFile  outFilename out
+  putStrLn out 
 
 generateResumes :: [ResumeAST] -> ResumeTex
 generateResumes rs = ResumeTex
