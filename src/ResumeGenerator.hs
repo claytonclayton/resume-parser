@@ -27,11 +27,16 @@ tabber i = T.pack $ take (i * tabSize) $ repeat ' '
 prefixFilename :: String
 prefixFilename = "prefix.tex"
 
+outFilename :: String
+outFilename = "out.tex"
+
 printResumes :: [ResumeAST] -> IO ()
 printResumes rs = do
-  let tex    = generateResumes rs
-      prefix = readFile prefixFilename 
-  prefix >>= putStrLn
+  let tex = generateResumes rs
+  prefix <- readFile prefixFilename 
+  writeFile  outFilename prefix
+  appendFile outFilename $ show tex
+  print prefix
   print tex  
 
 generateResumes :: [ResumeAST] -> ResumeTex
