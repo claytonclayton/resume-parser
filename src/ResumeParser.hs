@@ -117,6 +117,7 @@ parseDot =
   fmap Dot $ char '-' *> hspace *> parseChars
 
 -- have error message include the number of found '|'
+-- surely there's a cleaner way to write this
 parseBlockTraits :: Parser BlockTraits
 parseBlockTraits = do
   try $ do 

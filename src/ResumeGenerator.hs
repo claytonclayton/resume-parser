@@ -18,6 +18,12 @@ instance Show ResumeTex where
 link :: [a] -> (a -> [Text] -> [Text]) -> [Text] -> [Text]
 link as f = foldl (.) id $ f <$> as 
 
+tabSize :: Int
+tabSize = 4
+
+tabber :: Int -> Text
+tabber i = T.pack $ take (i * tabSize) $ repeat ' ' 
+
 generateResumes :: [ResumeAST] -> ResumeTex
 generateResumes rs = ResumeTex $ link rs generateResume []
  
@@ -35,6 +41,7 @@ generateSection (SectionAST (Section s) bs)
   . ("\\SectionStart" :) 
   . (link bs generateBlock) 
   . ("\\SectionEnd" :)
+  . ("" :)
 
 generateBlock :: BlockAST -> [Text] -> [Text]
 generateBlock (BlockAST b ls) = 
@@ -44,7 +51,8 @@ generateBlock (BlockAST b ls) =
       tr     = topRight traits
       bl     = botLeft traits
       br     = botRight traits
-  in ("\\Block{" <> title <> "}[" <> tl <> "][" <> tr <> "][" <> bl <> "][" <> br  <>" ]":)
+  in (tabber 1 <> "\\Block" :)
+   . (tabber 2 <> "{" <> title <> "}[" <> tl <> "][" <> tr <> "][" <> bl <> "][" <> br <> "]":)
    . (generateLines ls)
 
 generateLines :: [LineAST] -> [Text] -> [Text]
