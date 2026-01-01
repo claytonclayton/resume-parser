@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards   #-}
  
-module ResumeGenerator (generateResumes) where
+module ResumeGenerator (generateResumes, printResumes) where
 
 import ResumeParser (ResumeADT(ResumeADT), Intro, Section(Section), Block(Block, blockTitle, blockTraits), SubBlock(SubBlock), Dot(Dot), Flat(Flat), Line(PosSection, PosSubBlock, PosBlock, PosDot, PosFlat, PosIntro), BlockTraits(topLeft, topRight, botLeft, botRight)) 
 import ResumeGrouper (ResumeAST(ResumeAST), SectionAST(SectionAST), BlockAST(BlockAST), LineAST(Ff, Dd, Sb))
@@ -23,6 +23,16 @@ tabSize = 4
 
 tabber :: Int -> Text
 tabber i = T.pack $ take (i * tabSize) $ repeat ' ' 
+
+prefixFilename :: String
+prefixFilename = "prefix.tex"
+
+printResumes :: [ResumeAST] -> IO ()
+printResumes rs = do
+  let tex    = generateResumes rs
+      prefix = readFile prefixFilename 
+  prefix >>= putStrLn
+  print tex  
 
 generateResumes :: [ResumeAST] -> ResumeTex
 generateResumes rs = ResumeTex
