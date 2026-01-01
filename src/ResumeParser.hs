@@ -187,7 +187,7 @@ parseFlat = do
       (flatTitle, flatRest) = 
         case b of
           "" -> ("", a)
-          _  -> (a, b)
+          _  -> (a, T.strip $ T.drop 1 b)
   return Flat {..}
 
 parseLine :: Parser Line
