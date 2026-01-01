@@ -25,7 +25,12 @@ tabber :: Int -> Text
 tabber i = T.pack $ take (i * tabSize) $ repeat ' ' 
 
 generateResumes :: [ResumeAST] -> ResumeTex
-generateResumes rs = ResumeTex $ link rs generateResume []
+generateResumes rs = ResumeTex
+  $ ("\\begin{document}" :)
+  . (link rs generateResume) 
+  . ("\\end{document}" :)
+  . ("":)
+  $ []
  
 generateResume :: ResumeAST -> [Text] -> [Text]
 generateResume (ResumeAST i ss)
