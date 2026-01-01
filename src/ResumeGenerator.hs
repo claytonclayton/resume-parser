@@ -56,5 +56,18 @@ generateBlock (BlockAST b ls) =
    . (generateLines ls)
 
 generateLines :: [LineAST] -> [Text] -> [Text]
-generateLines ls = ("":) 
+generateLines [] = ("":)
+generateLines ls
+  = (tabber 1 <> "\\DotStart" :)   
+  . (link ls generateLine)
+  . (tabber 1 <> "\\DotEnd" :)
+  . ("":)
+
+generateLine :: LineAST -> [Text] -> [Text]
+generateLine (Dd (Dot d))
+  = (tabber 2 <> "\\Dot{" <> d <> "}" :) 
+generateLine (Ff (Flat ti re))
+  = (tabber 2 <> "\\Flat{" <> ti <> "}[" <> re <> "]" :)
+generateLine (Sb (SubBlock l r))
+  = (tabber 2 <> "\\SubBlock{" <> l <> "}" <> "[" <> r <> "]" :)
 
