@@ -25,6 +25,8 @@ source-repository head
 
 library
   exposed-modules:
+      ResumeGenerator
+      ResumeGrouper
       ResumeParser
   other-modules:
       Paths_resume_parser
