@@ -8,10 +8,11 @@
     - removed : 
     - fix spacing 
 - fix subBlock
-    - added command
+    - added subBlock tex command
 - make intro
 - allow sections to have dots
-- implement italics, bolds, strikethroughs
+- implement error messages
 
 ### BIG
+- implement italics, bolds, strikethroughs
 - make githubpages 
