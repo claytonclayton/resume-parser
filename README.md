@@ -11,10 +11,12 @@
 - fix subBlock
     - added subBlock tex command
     - collate blocks and subblocks
-- make intro
+- fix intro
+    - fix email link
 - allow sections to have dots
 - implement error messages
 
 ### BIG
+- remake jakes resume
 - implement italics, bolds, strikethroughs
 - make githubpages 

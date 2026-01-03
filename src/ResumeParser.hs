@@ -3,7 +3,7 @@
 
 module ResumeParser 
   ( ResumeADT(ResumeADT)
-  , Intro
+  , Intro(Intro)
   , Section(Section
   , sectionTitle)
   , SubBlock(SubBlock)

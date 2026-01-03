@@ -1,10 +1,44 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards   #-}
  
-module ResumeGenerator (generateResumes, printResumes) where
+module ResumeGenerator 
+  ( generateResumes
+  , printResumes
+  ) where
 
-import ResumeParser (ResumeADT(ResumeADT), Intro, Section(Section), Block(Block, blockTitle, blockTraits), SubBlock(SubBlock), Dot(Dot), Flat(Flat), Line(PosSection, PosSubBlock, PosBlock, PosDot, PosFlat, PosIntro), BlockTraits(topLeft, topRight, botLeft, botRight)) 
-import ResumeGrouper (ResumeAST(ResumeAST), SectionAST(SectionAST), BlockAST(BlockAST), LineAST(Ff, Dd, Sb))
+import ResumeParser 
+  ( ResumeADT (ResumeADT)
+  , Intro(Intro)
+  , Section(Section)
+  , Block
+    ( Block
+    , blockTitle
+    , blockTraits
+    )
+  , SubBlock(SubBlock)
+  , Dot(Dot)
+  , Flat(Flat)
+  , Line
+    ( PosSection
+    , PosSubBlock
+    , PosBlock
+    , PosDot
+    , PosFlat
+    , PosIntro
+    )
+  , BlockTraits
+    (topLeft
+    , topRight
+    , botLeft
+    , botRight
+    )
+  ) 
+import ResumeGrouper 
+  ( ResumeAST(ResumeAST)
+  , SectionAST(SectionAST)
+  , BlockAST(BlockAST)
+  , LineAST(Ff, Dd, Sb)
+  )
 import Data.Text (Text)
 import qualified Data.Text as T
 
@@ -41,6 +75,7 @@ printResumes rs = do
 generateResumes :: [ResumeAST] -> ResumeTex
 generateResumes rs = ResumeTex
   $ ("\\begin{document}" :)
+  . ("":)
   . (link rs generateResume) 
   . ("\\end{document}" :)
   . ("":)
@@ -52,7 +87,20 @@ generateResume (ResumeAST i ss)
   . (link ss generateSection)
 
 generateIntro :: Maybe Intro -> [Text] -> [Text]
-generateIntro i = ("":) 
+generateIntro Nothing
+  = ("":) -- consider preventing all together
+generateIntro (Just (Intro ti (t:ts)))
+  = ("\\begin{center}" :)
+  . (tabber 1 <> "\\ResumeTitle{" <> ti <> "}" :)
+  . (tabber 1 <> "\\small" <> foldl (\a b -> (a <> " $|$ " <> process b)) t ts :) -- check foldr / foldl efficiency
+  . ("\\end{center}" :)
+  . ("":)
+  where 
+    process t
+      | "@" `T.isInfixOf` t = makeUrl t
+      | "/" `T.isInfixOf` t = makeUrl t
+      | otherwise = t
+    makeUrl t = "\\underline{\\url{" <> t <> "}}" 
 
 generateSection :: SectionAST -> [Text] -> [Text]
 generateSection (SectionAST (Section s) bs) 
