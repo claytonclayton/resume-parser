@@ -97,10 +97,8 @@ generateIntro (Just (Intro ti (t:ts)))
   . ("":)
   where 
     process t
-      | "@" `T.isInfixOf` t = makeUrl t
-      | "/" `T.isInfixOf` t = makeUrl t
+      | any (`T.isInfixOf` t) ["@", "/"] = "\\underline{\\url{" <> t <> "}}" -- doesn't work with emails currently
       | otherwise = t
-    makeUrl t = "\\underline{\\url{" <> t <> "}}" 
 
 generateSection :: SectionAST -> [Text] -> [Text]
 generateSection (SectionAST (Section s) bs) 
