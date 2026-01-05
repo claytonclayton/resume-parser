@@ -3,9 +3,8 @@
  
 module ResumeGrouper 
   ( groupResumes
-  , ResumeAST (ResumeAST)
-  , SectionAST (SectionAST)
-  , Item
+  , ResumeGroup
+  , Minor
     ( Fs
     , Ds
     , Sb
@@ -45,30 +44,63 @@ import Data.Text (Text)
 import qualified Data.Text as T
 import Control.Monad (when)
 
-data ResumeAST = ResumeAST
-  { intro    :: Maybe Intro
-  , sections :: [SectionAST]
-  } 
+type ResumeGroup = [Major]
+
+data Major = Ss Section [Minor] | Ii Intro
   deriving (Show, Eq)
 
-data SectionAST = SectionAST
-  { section :: Section
-  , items   :: [Item] 
-  } 
-  deriving (Show, Eq)
-
-data Item = Fs [Flat] | Ds [Dot] | Sb SubBlock | Bb Block
+data Minor = Fs [Flat] | Ds [Dot] | Sb SubBlock | Bb Block
   deriving (Show, Eq)
 
 data GroupError
-  = ItemOutsideSection SourcePos
-  | RemainingLines     SourcePos
+  = MinorOutsideMajor Line
+  | RemainingLines    Line
   deriving (Show, Eq)
 
-groupResumes :: ResumeADT -> Either GroupError ([Line], [ResumeAST])
-groupResumes (ResumeADT ls) = undefined 
+type GroupResult a = Either GroupError ([Line], a)
 
--- groupResumes' :: [Line] -> Either GroupError ([Line], [ResumeAST])
+groupResumes :: ResumeADT -> Either GroupError ([Line], ResumeGroup)
+groupResumes (ResumeADT ls) = groupResumes' ls
+
+groupResumes' :: [Line] -> GroupResult ResumeGroup
+groupResumes' (PosIntro i : ls) = do
+  (ls', res) <- groupResumes' ls 
+  return (ls', (Ii $ getValue i) : res)
+groupResumes' (PosSection s : ls) = do
+  (rem1, mis) <- groupMinors ls 
+  (rem2, res) <- groupResumes' rem1 
+  return (rem2, (Ss (getValue s) mis) : res)
+groupResumes' (l:ls) = Left $ MinorOutsideMajor l
+
+groupMinors :: [Line] -> GroupResult [Minor]
+groupMinors (PosDot d : ls) = do
+  (rem1, dots) <- groupDots (PosDot d : ls)
+  (rem2, res)  <- groupMinors rem1 
+  return (rem2, Ds dots : res)
+groupMinors (PosFlat f : ls) = do
+  (rem1, flats) <- groupFlats (PosFlat f: ls)
+  (rem2, res)   <- groupMinors rem1 
+  return (rem2, Fs flats : res)
+groupMinors (PosBlock b : ls) = do
+  (ls', res) <- groupMinors ls
+  return (ls', (Bb $ getValue b) : res)
+groupMinors (PosSubBlock sb : ls) = do
+  (ls', res) <- groupMinors ls
+  return (ls', (Sb $ getValue sb) : res)
+  
+groupDots :: [Line] -> GroupResult [Dot]
+groupDots (PosDot d : ls) = do
+  (ls', dots) <- groupDots ls 
+  return (ls', (getValue d) : dots) 
+groupDots ls = return (ls, [])
+
+groupFlats :: [Line] -> GroupResult [Flat]
+groupFlats (PosFlat f : ls) = do
+  (ls', flats) <- groupFlats ls 
+  return (ls', (getValue f) : flats) 
+groupFlats ls = return (ls, [])
+  
+-- groupResumes' :: [Line] -> Either GroupError ([Line], [ResumeGroup])
 -- groupResumes' ls = do
 --   case ls of
 --     (PosIntro i : ls)   -> ret ls $ Just $ getValue i
@@ -80,7 +112,7 @@ groupResumes (ResumeADT ls) = undefined
 --       (rem1, sections) <- groupSections ls
 --       (rem2, res)      <- groupResumes' rem1
 --       when (length rem2 /= 0) $ Left RemainingLines
---       return (rem2, ResumeAST intro sections : res)
+--       return (rem2, ResumeGroup intro sections : res)
 --   
 -- dotCheck :: [Line] -> Either GroupError ()
 -- dotCheck (PosDot d : ls)      = Left DotOutsideBlock
@@ -89,13 +121,13 @@ groupResumes (ResumeADT ls) = undefined
 -- dotCheck _ = Right ()
 -- 
 -- -- consider rewriting with State monad
--- groupSections :: [Line] -> Either GroupError ([Line], [SectionAST])
+-- groupSections :: [Line] -> Either GroupError ([Line], [SectionGroup])
 -- groupSections (PosSection s : ls) = do
 --   dotCheck ls
 --   let section = getValue s
 --   (rem1, blocks)   <- groupBlocks ls 
 --   (rem2, sections) <- groupSections rem1
---   return (rem2, SectionAST section blocks : sections)
+--   return (rem2, SectionGroup section blocks : sections)
 -- groupSections ls = Right (ls, []) 
 --   
 -- groupBlocks :: [Line] -> Either GroupError ([Line], [BlockAST])
