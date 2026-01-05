@@ -130,6 +130,7 @@ generateMinor (Fs fs)
   = (tabber 1 <> "\\FlatStart" :) 
   . (link fs generateFlat)
   . (tabber 1 <> "\\FlatEnd" :)
+  . ("":)
   where
     generateFlat (Flat ti re) = (tabber 2 <> "\\Flat{" <> ti <> "}[" <> re <> "]" :) 
 
