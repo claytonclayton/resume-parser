@@ -127,8 +127,9 @@ generateMinor (Ds ds)
   where
     generateDot (Dot d) = (tabber 2 <> "\\Dot{" <> d <> "}" :) 
 generateMinor (Fs fs)
-  = ("\\item" :) 
+  = (tabber 1 <> "\\FlatStart" :) 
   . (link fs generateFlat)
+  . (tabber 1 <> "\\FlatEnd" :)
   where
     generateFlat (Flat ti re) = (tabber 2 <> "\\Flat{" <> ti <> "}[" <> re <> "]" :) 
 
@@ -141,19 +142,3 @@ generateBlock (Block title traits) =
   in (tabber 1 <> "\\Block" :)
    . (tabber 2 <> "{" <> title <> "}[" <> tl <> "][" <> tr <> "][" <> bl <> "][" <> br <> "]":)
 
--- generateLines :: [LineAST] -> DList
--- generateLines [] = ("":)
--- generateLines ls
---   = (tabber 1 <> "\\DotStart" :)   
---   . (link ls generateLine)
---   . (tabber 1 <> "\\DotEnd" :)
---   . ("":)
--- 
--- generateLine :: LineAST -> DList
--- generateLine (Dd (Dot d))
---   = (tabber 2 <> "\\Dot{" <> d <> "}" :) 
--- generateLine (Ff (Flat ti re))
---   = (tabber 2 <> "\\Flat{" <> ti <> "}[" <> re <> "]" :)
--- generateLine (Sb (SubBlock l r))
---   = (tabber 2 <> "\\SubBlock{" <> l <> "}" <> "[" <> r <> "]" :)
--- 
