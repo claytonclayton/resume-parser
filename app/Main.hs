@@ -3,7 +3,7 @@ module Main (main) where
 
 import Text.Megaparsec (runParser, errorBundlePretty)
 import ResumeParser  (parseResume)
-import ResumeGrouper (groupResumes, ResumeAST)
+import ResumeGrouper (groupResumes, ResumeGroup)
 import ResumeGenerator (generateResumes, printResumes)
 import qualified Data.Text.IO as TIO
 import qualified Data.Text as T

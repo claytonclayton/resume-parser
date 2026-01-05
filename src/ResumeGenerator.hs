@@ -34,11 +34,20 @@ import ResumeParser
     )
   ) 
 import ResumeGrouper 
-  ( ResumeAST(ResumeAST)
-  , SectionAST(SectionAST)
-  , BlockAST(BlockAST)
-  , LineAST(Ff, Dd, Sb)
+  ( groupResumes
+  , ResumeGroup
+  , Major
+    ( Ii
+    , Ss
+    )
+  , Minor
+    ( Bb
+    , Sb
+    , Ds
+    , Fs
+    )
   )
+
 import Data.Text (Text)
 import qualified Data.Text as T
 
@@ -49,7 +58,9 @@ instance Show ResumeTex where
   show (ResumeTex lines) = 
     T.unpack $ T.unlines lines 
 
-link :: [a] -> (a -> [Text] -> [Text]) -> [Text] -> [Text]
+type DList = [Text] -> [Text]
+
+link :: [a] -> (a -> DList) -> DList
 link as f = foldl (.) id $ f <$> as 
 
 tabSize :: Int
@@ -64,32 +75,35 @@ prefixFilename = "prefix.tex"
 outFilename :: String
 outFilename = "out.tex"
 
-printResumes :: [ResumeAST] -> IO ()
-printResumes rs = do
+printResumes :: ResumeGroup -> IO ()
+printResumes r = do
   prefix <- readFile prefixFilename 
-  let tex = generateResumes rs
+  let tex = generateResumes r
       out = prefix <> show tex
   writeFile  outFilename out
   putStrLn out 
 
-generateResumes :: [ResumeAST] -> ResumeTex
-generateResumes rs = ResumeTex
+generateResumes :: ResumeGroup -> ResumeTex
+generateResumes r = ResumeTex
   $ ("\\begin{document}" :)
   . ("":)
-  . (link rs generateResume) 
+  . (link r generateMajor) 
   . ("\\end{document}" :)
   . ("":)
   $ []
- 
-generateResume :: ResumeAST -> [Text] -> [Text]
-generateResume (ResumeAST i ss)
-  = (generateIntro i) 
-  . (link ss generateSection)
+  
+generateMajor :: Major -> DList
+generateMajor (Ii intro) 
+  = generateIntro intro 
+generateMajor (Ss (Section s) mis) 
+  = ("\\section{" <> s <> "}" :) 
+  . ("\\SectionStart" :) 
+  . (link mis generateMinor) 
+  . ("\\SectionEnd" :)
+  . ("" :)
 
-generateIntro :: Maybe Intro -> [Text] -> [Text]
-generateIntro Nothing
-  = ("":) -- consider preventing all together
-generateIntro (Just (Intro ti (t:ts)))
+generateIntro :: Intro -> DList
+generateIntro (Intro ti (t:ts))
   = ("\\begin{center}" :)
   . (tabber 1 <> "\\ResumeTitle{" <> ti <> "}" :)
   . (tabber 1 <> "\\small" <> foldl (\a b -> (a <> " $|$ " <> process b)) t ts :) -- check foldr / foldl efficiency
@@ -100,39 +114,46 @@ generateIntro (Just (Intro ti (t:ts)))
       | any (`T.isInfixOf` t) ["@", "/"] = "\\underline{\\url{" <> t <> "}}" -- doesn't work with emails currently
       | otherwise = t
 
-generateSection :: SectionAST -> [Text] -> [Text]
-generateSection (SectionAST (Section s) bs) 
-  = ("\\section{" <> s <> "}" :) 
-  . ("\\SectionStart" :) 
-  . (link bs generateBlock) 
-  . ("\\SectionEnd" :)
-  . ("" :)
-
-generateBlock :: BlockAST -> [Text] -> [Text]
-generateBlock (BlockAST b ls) = 
-  let title  = blockTitle b
-      traits = blockTraits b 
-      tl     = topLeft traits
-      tr     = topRight traits
-      bl     = botLeft traits
-      br     = botRight traits
-  in (tabber 1 <> "\\Block" :)
-   . (tabber 2 <> "{" <> title <> "}[" <> tl <> "][" <> tr <> "][" <> bl <> "][" <> br <> "]":)
-   . (generateLines ls)
-
-generateLines :: [LineAST] -> [Text] -> [Text]
-generateLines [] = ("":)
-generateLines ls
+generateMinor :: Minor -> DList
+generateMinor (Bb b)  
+  = generateBlock b
+generateMinor (Sb (SubBlock l r)) 
+  = (tabber 1 <> "\\SubBlock{" <> l <> "}" <> "[" <> r <> "]" :)
+generateMinor (Ds ds)
   = (tabber 1 <> "\\DotStart" :)   
-  . (link ls generateLine)
+  . (link ds generateDot)
   . (tabber 1 <> "\\DotEnd" :)
   . ("":)
+  where
+    generateDot (Dot d) = (tabber 2 <> "\\Dot{" <> d <> "}" :) 
+generateMinor (Fs fs)
+  = ("\\item" :) 
+  . (link fs generateFlat)
+  where
+    generateFlat (Flat ti re) = (tabber 2 <> "\\Flat{" <> ti <> "}[" <> re <> "]" :) 
 
-generateLine :: LineAST -> [Text] -> [Text]
-generateLine (Dd (Dot d))
-  = (tabber 2 <> "\\Dot{" <> d <> "}" :) 
-generateLine (Ff (Flat ti re))
-  = (tabber 2 <> "\\Flat{" <> ti <> "}[" <> re <> "]" :)
-generateLine (Sb (SubBlock l r))
-  = (tabber 2 <> "\\SubBlock{" <> l <> "}" <> "[" <> r <> "]" :)
+generateBlock :: Block -> DList
+generateBlock (Block title traits) = 
+  let tl = topLeft traits
+      tr = topRight traits
+      bl = botLeft traits
+      br = botRight traits
+  in (tabber 1 <> "\\Block" :)
+   . (tabber 2 <> "{" <> title <> "}[" <> tl <> "][" <> tr <> "][" <> bl <> "][" <> br <> "]":)
 
+-- generateLines :: [LineAST] -> DList
+-- generateLines [] = ("":)
+-- generateLines ls
+--   = (tabber 1 <> "\\DotStart" :)   
+--   . (link ls generateLine)
+--   . (tabber 1 <> "\\DotEnd" :)
+--   . ("":)
+-- 
+-- generateLine :: LineAST -> DList
+-- generateLine (Dd (Dot d))
+--   = (tabber 2 <> "\\Dot{" <> d <> "}" :) 
+-- generateLine (Ff (Flat ti re))
+--   = (tabber 2 <> "\\Flat{" <> ti <> "}[" <> re <> "]" :)
+-- generateLine (Sb (SubBlock l r))
+--   = (tabber 2 <> "\\SubBlock{" <> l <> "}" <> "[" <> r <> "]" :)
+-- 
