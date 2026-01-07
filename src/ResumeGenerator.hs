@@ -69,8 +69,8 @@ tabSize = 4
 tabber :: Int -> Text
 tabber i = T.pack $ take (i * tabSize) $ repeat ' ' 
 
-prefixFileName = "me/in/prefix.tex"
-outFileName = "me/out/resume.tex"
+prefixFileName = "me/pipeline/tex/prefix.tex"
+outFileName    = "me/pipeline/tex/resume.tex"
 
 printResumes :: ResumeGroup -> IO ()
 printResumes r = do
@@ -103,7 +103,7 @@ generateIntro :: Intro -> DList
 generateIntro (Intro ti (t:ts))
   = ("\\begin{center}" :)
   . (tabber 1 <> "\\ResumeTitle{" <> ti <> "}" :)
-  . (tabber 1 <> "\\small" <> foldl (\a b -> (a <> " $|$ " <> process b)) t ts :) -- check foldr / foldl efficiency
+  . (tabber 1 <> "\\small " <> foldl (\a b -> (a <> " $|$ " <> process b)) t ts :) -- check foldr / foldl efficiency
   . ("\\end{center}" :)
   . ("":)
   where 
