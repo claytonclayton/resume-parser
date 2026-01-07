@@ -69,18 +69,15 @@ tabSize = 4
 tabber :: Int -> Text
 tabber i = T.pack $ take (i * tabSize) $ repeat ' ' 
 
-prefixFilename :: String
-prefixFilename = "prefix.tex"
-
-outFilename :: String
-outFilename = "out.tex"
+prefixFileName = "me/in/prefix.tex"
+outFileName = "me/out/resume.tex"
 
 printResumes :: ResumeGroup -> IO ()
 printResumes r = do
-  prefix <- readFile prefixFilename 
+  prefix <- readFile prefixFileName 
   let tex = generateResumes r
       out = prefix <> show tex
-  writeFile  outFilename out
+  writeFile  outFileName out
   putStrLn out 
 
 generateResumes :: ResumeGroup -> ResumeTex

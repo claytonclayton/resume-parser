@@ -8,9 +8,11 @@ import ResumeGenerator (generateResumes, printResumes)
 import qualified Data.Text.IO as TIO
 import qualified Data.Text as T
 
+inFileName = "me/in/resume.md"
+
 main :: IO ()
 main = do
-  md <- TIO.readFile "resume.md"
+  md <- TIO.readFile inFileName
   let lint     = T.unlines $ fmap T.strip $ T.lines md
       parseOut = runParser parseResume "" lint
   case parseOut of 
