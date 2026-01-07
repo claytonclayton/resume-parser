@@ -2,21 +2,28 @@
 
 ## TODO
 
-### SMALL
+### Done
 - fixed Dots spacing
 - fix flats
     - removed : 
     - fix spacing 
-    - divide flats and dots
+    - divided flats and dots
 - fix subBlock
     - added subBlock tex command
-    - collate blocks and subblocks
-- fix intro
-    - fix email link
-- allow sections to have dots
-- implement error messages
+    - collated blocks and subblocks
+- write cli
+    - claytons
+- allowed sections to have dots
+- converted scotts resume to md
 
-### BIG
+### Small
+- fix intro email link
 - remake jakes resume
+- implement sublists (see julie's resume)
+- block title text wrapping
+
+### Big
+- implement error messages
 - implement italics, bolds, strikethroughs
 - make githubpages 
+
