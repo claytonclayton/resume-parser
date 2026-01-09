@@ -4,4 +4,5 @@ me/aux
 me/friends-resumes
 me/pipeline/*
 !me/pipeline/.gitkeep
-
+me/md/*
+!me/me/resume.md
