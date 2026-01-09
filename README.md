@@ -21,9 +21,9 @@
 - remake jakes resume
 - implement sublists (see julie's resume)
 - block title text wrapping (see scott's resume)
+- make gen.sh more robust by addings to checks to arguments
 
 ### Big
 - implement error messages
 - implement italics, bolds, strikethroughs
-- make githubpages 
 
