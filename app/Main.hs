@@ -12,7 +12,7 @@ import qualified Data.Text.Lazy.Builder as B
 import Data.Text.Lazy (toStrict)
 import Data.Text (Text)
 
-defaultInFileName = "me/pipeline/md/resume.md"
+defaultInFileName = "me/md/resume.md"
 
 -- Move to another file
 -- escaper is NAIVE

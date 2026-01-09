@@ -20,7 +20,7 @@
 - fix intro email link
 - remake jakes resume
 - implement sublists (see julie's resume)
-- block title text wrapping
+- block title text wrapping (see scott's resume)
 
 ### Big
 - implement error messages
