@@ -1,12 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards   #-}
  
-module ResumeGenerator 
+module Resume.Generator 
   ( generateResumes
   , printResumes
   ) where
 
-import ResumeParser 
+import Resume.Parser 
   ( ResumeADT (ResumeADT)
   , Intro(Intro)
   , Section(Section)
@@ -33,7 +33,7 @@ import ResumeParser
     , botRight
     )
   ) 
-import ResumeGrouper 
+import Resume.Grouper 
   ( groupResumes
   , ResumeGroup
   , Major

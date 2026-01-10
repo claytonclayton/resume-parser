@@ -22,6 +22,7 @@
 - implement sublists (see julie's resume)
 - block title text wrapping (see scott's resume)
 - make gen.sh more robust by addings to checks to arguments
+- make nested cases of Main more pretty
 
 ### Big
 - implement error messages

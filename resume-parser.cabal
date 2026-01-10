@@ -25,9 +25,11 @@ source-repository head
 
 library
   exposed-modules:
-      ResumeGenerator
-      ResumeGrouper
-      ResumeParser
+      Resume.Cli
+      Resume.Generator
+      Resume.Grouper
+      Resume.Parser
+      Resume.Preprocessor
   other-modules:
       Paths_resume_parser
   autogen-modules:

@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards   #-}
 
-module ResumeParser 
+module Resume.Parser 
   ( ResumeADT(ResumeADT)
   , Intro(Intro)
   , Section(Section

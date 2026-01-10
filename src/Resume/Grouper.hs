@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards   #-}
  
-module ResumeGrouper 
+module Resume.Grouper 
   ( groupResumes
   , ResumeGroup
   , Minor
@@ -17,7 +17,7 @@ module ResumeGrouper
   ) 
   where
 
-import ResumeParser 
+import Resume.Parser 
   ( ResumeADT(ResumeADT)
   , Intro
   , Section(Section
