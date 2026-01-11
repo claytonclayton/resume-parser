@@ -37,14 +37,11 @@ module Resume.Parser
     )
   ) where
 
-import Control.Monad (when) 
-import Data.Char (isAlphaNum)
 import Data.Text (Text)
 import Data.Void
 import Text.Megaparsec hiding (State)
 import Text.Megaparsec.Char
 import qualified Data.Text as T
-import Control.Monad (void)
 
 data ResumeADT = ResumeADT [Line]
   deriving (Eq)

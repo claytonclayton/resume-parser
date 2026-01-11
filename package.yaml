@@ -23,6 +23,7 @@ dependencies:
 - base >= 4.7 && < 5
 - text
 - megaparsec
+- scotty
 
 ghc-options:
 - -Wall
@@ -39,13 +40,23 @@ library:
   source-dirs: src
 
 executables:
-  resume-parser-exe:
+  resume-server:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
+    dependencies:
+    - resume-parser
+    - scotty
+
+  resume-gen:
+    main:                Cli.hs
+    source-dirs:         app
+    other-modules:       []
+    ghc-options:
+    - -main-is Cli
     dependencies:
     - resume-parser
 

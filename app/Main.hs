@@ -1,7 +1,7 @@
 
 module Main (main) where
 
-import Resume.Cli (gen)
+import Resume.Server (server)
 
 main :: IO ()
-main = gen
+main = server

@@ -25,11 +25,11 @@ source-repository head
 
 library
   exposed-modules:
-      Resume.Cli
       Resume.Generator
       Resume.Grouper
       Resume.Parser
       Resume.Preprocessor
+      Resume.Server
   other-modules:
       Paths_resume_parser
   autogen-modules:
@@ -40,12 +40,27 @@ library
   build-depends:
       base >=4.7 && <5
     , megaparsec
+    , scotty
     , text
   default-language: Haskell2010
 
-executable resume-parser-exe
+executable resume-gen
+  main-is: Cli.hs
+  hs-source-dirs:
+      app
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -main-is Cli
+  build-depends:
+      base >=4.7 && <5
+    , megaparsec
+    , resume-parser
+    , scotty
+    , text
+  default-language: Haskell2010
+
+executable resume-server
   main-is: Main.hs
   other-modules:
+      Cli
       Paths_resume_parser
   autogen-modules:
       Paths_resume_parser
@@ -56,6 +71,7 @@ executable resume-parser-exe
       base >=4.7 && <5
     , megaparsec
     , resume-parser
+    , scotty
     , text
   default-language: Haskell2010
 
@@ -73,5 +89,6 @@ test-suite resume-parser-test
       base >=4.7 && <5
     , megaparsec
     , resume-parser
+    , scotty
     , text
   default-language: Haskell2010

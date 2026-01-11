@@ -1,7 +1,5 @@
 
-module Resume.Cli 
-  ( gen
-  ) where
+module Cli (main) where
 
 import Resume.Parser  
   ( parseResume
@@ -31,8 +29,8 @@ import Data.Text (Text)
 
 defaultInFileName = "me/md/resume.md"
 
-gen :: IO ()
-gen = do
+main :: IO ()
+main = do
   args <- getArgs
   let inFileName 
         = case args of

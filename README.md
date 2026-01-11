@@ -23,6 +23,9 @@
 - block title text wrapping (see scott's resume)
 - make gen.sh more robust by addings to checks to arguments
 - make nested cases of Main more pretty
+- make Resume.Parser data types more clean
+    - consider sum of record syntaxes
+    - consider refactoring Positioned
 
 ### Big
 - implement error messages
