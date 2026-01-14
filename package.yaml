@@ -24,6 +24,10 @@ dependencies:
 - text
 - megaparsec
 - scotty
+- wai-middleware-static
+- directory
+- process
+- transformers
 
 ghc-options:
 - -Wall

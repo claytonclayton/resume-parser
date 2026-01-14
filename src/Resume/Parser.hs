@@ -12,6 +12,7 @@ module Resume.Parser
   , Parser
   , parseResume
   , parseSep
+  , defaultBlockTraits
   , Line
     ( PosSection
     , PosSubBlock
@@ -42,6 +43,9 @@ import Data.Void
 import Text.Megaparsec hiding (State)
 import Text.Megaparsec.Char
 import qualified Data.Text as T
+import Control.Monad (liftM, mzero)
+import Control.Monad.Trans.Maybe
+import Control.Monad.Trans.Class
 
 data ResumeADT = ResumeADT [Line]
   deriving (Eq)
@@ -147,19 +151,20 @@ parseDot :: Parser Dot
 parseDot = 
   fmap Dot $ char '-' *> hspace *> parseChars
 
+-- use MaybeT
 -- have error message include the number of found '|'
 parseBlockTraits :: Parser BlockTraits
-parseBlockTraits = try $ 
-  do char '+'
-     line <- parseSep '|'
-     case line of
-       [a]          -> return defaultBlockTraits {topRight = a}
-       [a, b]       -> return defaultBlockTraits {topLeft = a, topRight = b}
-       [a, b, c]    -> return defaultBlockTraits {topRight = a, botLeft = b, botRight = c}
-       [a, b, c, d] -> return defaultBlockTraits {topLeft = a, topRight = b, botLeft = c, botRight = d}
-       _            -> fail "blockTraits requires 0-3 '|'"
-  <|> return defaultBlockTraits
-
+parseBlockTraits = 
+  liftM (maybe defaultBlockTraits id) . runMaybeT $ do 
+    lift $ optional . try $ char '+' -- should be able to early exit with Nothing
+    line <- lift $ parseSep '|'
+    case line of
+      [a]          -> return defaultBlockTraits {topRight = a}
+      [a, b]       -> return defaultBlockTraits {topLeft = a, topRight = b}
+      [a, b, c]    -> return defaultBlockTraits {topRight = a, botLeft = b, botRight = c}
+      [a, b, c, d] -> return defaultBlockTraits {topLeft = a, topRight = b, botLeft = c, botRight = d}
+      _            -> fail "blockTraits requires 0-3 '|'"
+    
 parseSubBlock :: Parser SubBlock
 parseSubBlock = do
   char '+'
