@@ -1,50 +1,26 @@
 # resume-parser
 
-## TODO
-
-### Done
-- fixed Dots spacing
-- fix flats
-    - removed : 
-    - fix spacing 
-    - divided flats and dots
-- fix subBlock
-    - added subBlock tex command
-    - collated blocks and subblocks
-- write cli
-    - claytons
-- allowed sections to have dots
-- converted scotts resume to md
-
-### Small
-- fix intro email link
-- remake jakes resume
-- implement sublists (see julie's resume)
-- block title text wrapping (see scott's resume)
-- make gen.sh more robust by addings to checks to arguments
-- make nested cases of Main more pretty
-- make Resume.Parser data types more clean
-    - consider sum of record syntaxes
-    - consider refactoring Positioned
-- test other latex characters and add to escapees 
-    - \_, %, #
-- review pandoc markdown to latex skills
-
-### Big
-- implement error messages
-- implement italics, bolds, strikethroughs
-- implement escapes of #, - etc. 
-
-### Roadmap
-- [ ] understand liftM, runMaybeT stackoverflow post 
-    - https://stackoverflow.com/questions/15441956/how-do-i-make-a-do-block-return-early
-- [ ] learn how to use hoogle
-    - [ ] download hoogle cli
-- [ ] implement basic paste md -> download pdf pipeline on frontend
-    - [ ] discern roughly how frontend will display errors
+## Roadmap
+- [ ] implement 'parse' button (maybe think of a better name).   
+      converts from md to latex then either shows the user an error or complete status.
+    - [ ] produce some failing md test cases
+        - [x] download hoogle cli
+        - [x] understand liftM, runMaybeT stackoverflow post 
+        - [x] refactor parseLine using unlawful \*> 
+        - [ ] refactor Line
+    - [ ] QuickCheck?
+    - [ ] display basic errors on front end
+- [ ] implement 'render' button 
+    - [ ] show preview box
 - [ ] sanitise input
+- [ ] fix intro email link
+- [ ] sublists (see julie resume)
+- [ ] block title wrap (see scott resume)
+- [ ] convert some latex resume templates into my style
+- [ ] work on the front end. probs react
+- [ ] implement italics, bolds, strikethroughs
 
-### Features I want
+## Features I want
 - [ ] AI that converts resume pdfs into md
 - [ ] database that saves your md files
 - [ ] linter
@@ -60,4 +36,7 @@
 - [ ] resume show case section
 - [ ] ability to write arbitrary latex if you have
     an account? could get latex injected
+- [ ] choose from a variety of resume templates
+- [ ] be able to convert from orgmode as well as md
+- [ ] upload images and embed them in resumes
 
