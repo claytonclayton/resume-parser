@@ -1,15 +1,17 @@
 # resume-parser
 
 ## Roadmap
-- [ ] implement 'parse' button (maybe think of a better name).   
+- [ ] implement 'parse' button (maybe think of a better name. transpile?).   
       converts from md to latex then either shows the user an error or complete status.
     - [ ] produce some failing md test cases
         - [x] download hoogle cli
         - [x] understand liftM, runMaybeT stackoverflow post 
         - [x] refactor parseLine using unlawful \*> 
         - [x] refactor Line
-        - [ ] refactor Grouper
+        - [x] refactor Grouper
+        - [ ] refactor Cli and Render with System.Process
         - [ ] refactor parseBlockTraits with unlawful \*>
+        - [ ] mv Generator.hs Transpiler.hs
     - [ ] haskell nvim error highlight plugin?
     - [ ] QuickCheck?
     - [ ] display basic errors on front end

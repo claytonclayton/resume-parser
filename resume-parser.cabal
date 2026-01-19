@@ -42,6 +42,7 @@ library
       base >=4.7 && <5
     , directory
     , megaparsec
+    , mtl
     , process
     , scotty
     , text
@@ -58,6 +59,7 @@ executable resume-gen
       base >=4.7 && <5
     , directory
     , megaparsec
+    , mtl
     , process
     , resume-parser
     , scotty
@@ -80,6 +82,7 @@ executable resume-server
       base >=4.7 && <5
     , directory
     , megaparsec
+    , mtl
     , process
     , resume-parser
     , scotty
@@ -102,6 +105,7 @@ test-suite resume-parser-test
       base >=4.7 && <5
     , directory
     , megaparsec
+    , mtl
     , process
     , resume-parser
     , scotty

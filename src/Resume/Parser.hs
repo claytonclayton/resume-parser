@@ -125,7 +125,7 @@ data Element
   | F  Flat
   deriving (Eq, Show)
 
-type Parser = Parsec FrechoError Text
+type Parser = Parsec Void Text
 
 data FrechoError = FrechoError String
   deriving (Eq, Ord, Show)

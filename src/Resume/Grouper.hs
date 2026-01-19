@@ -2,8 +2,9 @@
 {-# LANGUAGE RecordWildCards   #-}
  
 module Resume.Grouper 
-  ( groupResumes
+  ( groupResume
   , ResumeGroup
+  , GroupError
   , Minor
     ( Fs
     , Ds
@@ -62,23 +63,29 @@ data Minor = Fs [Flat] | Ds [Dot] | Sb SubBlock | Bb Block
 
 data GroupError
   = MinorOutsideMajor Line
-  | RemainingLines    Line
+  | RemainingLines
   deriving (Show, Eq)
 
 type GroupResult a = Either GroupError ([Line], a)
 
-groupResumes :: Resume -> GroupResult ResumeGroup
-groupResumes (Resume ls) = groupResumes' ls
+-- add back RemainingLines error
+groupResume :: Resume -> Either GroupError ResumeGroup
+groupResume (Resume ls) = do
+  (ls', res) <- groupResume' ls
+  Right res
+  --case ls' of
+  --  [] -> Left RemainingLines -- should include what lines were not included
+  --  _  -> Right res
 
-groupResumes' :: [Line] -> GroupResult ResumeGroup
-groupResumes' (Line _ (I i) : ls) = 
-  (fmap . fmap) (Ii i :) (groupResumes' ls)
-groupResumes' (Line _ (S s) : ls) = do
-  (rem1, mis) <- groupMinors ls 
-  (rem2, res) <- groupResumes' rem1 
+groupResume' :: [Line] -> GroupResult ResumeGroup
+groupResume' (Line _ (I i) : ls) = 
+  (fmap . fmap) (Ii i :) (groupResume' ls)
+groupResume' (Line _ (S s) : ls) = do
+  (rem1, mis) <- groupMinors ls
+  (rem2, res) <- groupResume' rem1 
   return (rem2, (Ss s mis) : res)
-groupResumes' (l:ls) = Left $ MinorOutsideMajor l
-groupResumes' ls = return (ls, [])
+--groupResume' (l:ls) = Left $ MinorOutsideMajor l
+groupResume' ls = return (ls, [])
 
 groupMinors :: [Line] -> GroupResult [Minor]
 groupMinors (Line p l : ls) =
@@ -96,7 +103,7 @@ groupMinors (Line p l : ls) =
     SB s ->
       (fmap . fmap) (Sb s :) (groupMinors ls)
     _    -> 
-      return (ls, [])
+      return (Line p l : ls, [])
 groupMinors ls = return (ls, [])
 
 --groupRest :: a -> [Line] -> ([Line] -> GroupResult [a]) -> [Line] -> GroupResult [a]

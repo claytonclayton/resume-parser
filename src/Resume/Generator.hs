@@ -2,7 +2,7 @@
 {-# LANGUAGE RecordWildCards   #-}
  
 module Resume.Generator 
-  ( generateResumes
+  ( generateResume
   , printResumes
   ) where
 
@@ -26,7 +26,7 @@ import Resume.Parser
     )
   ) 
 import Resume.Grouper 
-  ( groupResumes
+  ( groupResume
   , ResumeGroup
   , Major
     ( Ii
@@ -67,13 +67,13 @@ outFileName    = "me/pipeline/tex/resume.tex"
 printResumes :: ResumeGroup -> IO ()
 printResumes r = do
   prefix <- readFile prefixFileName 
-  let tex = generateResumes r
+  let tex = generateResume r
       out = prefix <> show tex
   writeFile  outFileName out
   putStrLn out 
 
-generateResumes :: ResumeGroup -> ResumeTex
-generateResumes r = ResumeTex
+generateResume :: ResumeGroup -> ResumeTex
+generateResume r = ResumeTex
   $ ("\\begin{document}" :)
   . ("":)
   . (link r generateMajor) 
