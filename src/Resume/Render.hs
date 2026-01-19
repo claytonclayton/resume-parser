@@ -1,5 +1,8 @@
 
-module Resume.Render (executeRender) where
+module Resume.Render 
+  ( executeRender
+  , executeTranspile
+  ) where
 
 import Resume.Parser  
   ( parseResume
@@ -48,16 +51,21 @@ data RenderError
   = PErr (ParseErrorBundle Text Void)
   | GErr GroupError
   | ExitCode Int
-  deriving (Show)
+
+instance Show RenderError where
+  show (PErr p) = errorBundlePretty p
+  show (GErr g) = show g
+  show (ExitCode i) = "exit code: " <> show i 
 
 -- maybe convert to simply Either and move effects elsewhere
-transpile :: Text -> ExceptT RenderError IO ()
+transpile :: Text -> ExceptT RenderError IO Text 
 transpile md = do
   lines  <- except $ first PErr $ runParser parseResume "" $ preprocess md
   groups <- except $ first GErr $ groupResume lines
   prefix <- lift $ readFile prefixPath
   let tex = (<>) prefix $ show $ generateResume groups
   lift $ writeFile texPath tex
+  return $ T.pack tex
 
 render :: Maybe FilePath -> ExceptT RenderError IO ()
 render mdPath = do
@@ -80,8 +88,17 @@ render mdPath = do
     ExitFailure c -> throwE $ ExitCode c
 
 executeRender :: Maybe FilePath -> IO ()
-executeRender mPath = do
-  result <- runExceptT (render mPath)
+executeRender mdPath = do
+  result <- runExceptT (render mdPath)
   case result of
     Left err -> print err
     Right _  -> return ()
+
+executeTranspile :: Maybe FilePath -> IO ()
+executeTranspile mdPath = do
+  md  <- TIO.readFile $ fromMaybe defaultMdPath mdPath
+  res <- runExceptT (transpile md)
+  case res of
+    Left err  -> print err
+    Right tex -> TIO.putStrLn tex
+

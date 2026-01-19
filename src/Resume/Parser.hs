@@ -161,18 +161,17 @@ parseDot :: Parser Dot
 parseDot = 
   fmap Dot $ char '-' *> hspace *> parseChars
 
--- have error message include the number of found '|'
 parseBlockTraits :: Parser BlockTraits
 parseBlockTraits = 
-  liftM (maybe defaultBlockTraits id) . runMaybeT $ do 
-    lift $ optional . try $ char '+' -- should be able to early exit with Nothing
-    line <- lift $ parseSep '|'
+  char '+' *> do
+    line <- parseSep '|'
     case line of
       [a]          -> return defaultBlockTraits {topRight = a}
       [a, b]       -> return defaultBlockTraits {topLeft = a, topRight = b}
       [a, b, c]    -> return defaultBlockTraits {topRight = a, botLeft = b, botRight = c}
       [a, b, c, d] -> return defaultBlockTraits {topLeft = a, topRight = b, botLeft = c, botRight = d}
-      _            -> fail $ "blockTraits requires 0-3 '|'. " <> (show $ (+) (-1) . length $ line) <> " '|' found."
+      _            -> fail $ "blockTraits requires 0-3 '|'. \n" <> "'|' x " <> (show $ (+) (-1) . length $ line) <> " found."
+  <|> return defaultBlockTraits
    
 parseSubBlockStart :: Parser ()
 parseSubBlockStart = void $ char '+' 
@@ -180,11 +179,10 @@ parseSubBlockStart = void $ char '+'
 parseSubBlockEnd :: Parser SubBlock
 parseSubBlockEnd = do
   line <- parseSep '|'
-  subBlock <- case line of
+  case line of
     [a]    -> return defaultSubBlock {left = a}
     [a, b] -> return defaultSubBlock {left = a, right = b}
     _      -> fail "subBlockTraits requires 0-1 '|'"
-  return subBlock
 
 parseBlockStart :: Parser ()
 parseBlockStart = do
@@ -215,33 +213,7 @@ parseFlat = do
   -- makeLineParse is called or is makeLineParse called everytime?
   -- in which case is this a bad implementation since getSourcePos
   -- is apparently slow? (see docs)
--- should add 'try' on every parse
--- parseLine :: Parser Line
--- parseLine = do
---   makeLineParse $ firstCustomFailOrPass
---     [ B  <$> parseBlock
---     , S  <$> parseSection
---     , I  <$> parseIntro
---     , SB <$> parseSubBlock
---     , D  <$> parseDot
---     , F  <$> parseFlat
---     ] 
---   where 
---     makeLineParse p = Loc <$> getSourcePos <*> p 
---     firstCustomFailOrPass = foldr choicer mzero 
---     choicer p rest = do
---       r <- observing p
---       case r of 
---         Right x  -> return x
---         Left err -> maybe rest customFailure $ hasCustom err
--- 
--- hasCustom :: ParseError s e -> Maybe e
--- hasCustom (FancyError _ s) = msum $ fmap isCustom $ S.toList s 
---   where
---     isCustom (ErrorCustom e) = Just e
---     isCustom _               = Nothing
--- hasCustom _ = Nothing
-
+-- should add 'try' on every parse?
 parseLine :: Parser Line
 parseLine = do
   makeLineParse $ choice 

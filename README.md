@@ -9,9 +9,11 @@
         - [x] refactor parseLine using unlawful \*> 
         - [x] refactor Line
         - [x] refactor Grouper
-        - [ ] refactor Cli and Render with System.Process
-        - [ ] refactor parseBlockTraits with unlawful \*>
-        - [ ] mv Generator.hs Transpiler.hs
+        - [x] refactor Cli and Render with System.Process
+        - [x] refactor parseBlockTraits with unlawful \*>
+        - [x] produce parse errors
+        - [ ] produce group errors 
+        - [ ] produce latexmk errors?
     - [ ] haskell nvim error highlight plugin?
     - [ ] QuickCheck?
     - [ ] display basic errors on front end
