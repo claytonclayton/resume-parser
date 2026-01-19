@@ -18,7 +18,7 @@ module Resume.Grouper
   where
 
 import Resume.Parser 
-  ( ResumeADT(ResumeADT)
+  ( Resume(Resume)
   , Intro
   , Section(Section
   , sectionTitle)
@@ -33,14 +33,18 @@ import Resume.Parser
   , Dot(Dot)
   , Flat(Flat)
   , Line
-    (PosSection
-    , PosSubBlock
-    , PosBlock
-    , PosDot
-    , PosFlat
-    , PosIntro
+    ( Line
+    , getPos
+    , getVal
     )
-  , Positioned(getPos, getValue)
+  , Element
+    ( I
+    , S
+    , SB
+    , B
+    , D
+    , F
+    )
   ) 
 
 import Text.Megaparsec hiding (State)
@@ -63,45 +67,47 @@ data GroupError
 
 type GroupResult a = Either GroupError ([Line], a)
 
-groupResumes :: ResumeADT -> Either GroupError ([Line], ResumeGroup)
-groupResumes (ResumeADT ls) = groupResumes' ls
+groupResumes :: Resume -> GroupResult ResumeGroup
+groupResumes (Resume ls) = groupResumes' ls
 
 groupResumes' :: [Line] -> GroupResult ResumeGroup
-groupResumes' (PosIntro i : ls) = do
-  (ls', res) <- groupResumes' ls 
-  return (ls', (Ii $ getValue i) : res)
-groupResumes' (PosSection s : ls) = do
+groupResumes' (Line _ (I i) : ls) = 
+  (fmap . fmap) (Ii i :) (groupResumes' ls)
+groupResumes' (Line _ (S s) : ls) = do
   (rem1, mis) <- groupMinors ls 
   (rem2, res) <- groupResumes' rem1 
-  return (rem2, (Ss (getValue s) mis) : res)
+  return (rem2, (Ss s mis) : res)
 groupResumes' (l:ls) = Left $ MinorOutsideMajor l
 groupResumes' ls = return (ls, [])
 
 groupMinors :: [Line] -> GroupResult [Minor]
-groupMinors (PosDot d : ls) = do
-  (rem1, dots) <- groupDots (PosDot d : ls)
-  (rem2, res)  <- groupMinors rem1 
-  return (rem2, Ds dots : res)
-groupMinors (PosFlat f : ls) = do
-  (rem1, flats) <- groupFlats (PosFlat f: ls)
-  (rem2, res)   <- groupMinors rem1 
-  return (rem2, Fs flats : res)
-groupMinors (PosBlock b : ls) = do
-  (ls', res) <- groupMinors ls
-  return (ls', (Bb $ getValue b) : res)
-groupMinors (PosSubBlock sb : ls) = do
-  (ls', res) <- groupMinors ls
-  return (ls', (Sb $ getValue sb) : res)
+groupMinors (Line p l : ls) =
+  case l of
+    D _  -> do
+      (rem1, dots) <- groupDots (Line p l : ls)
+      (rem2, res)  <- groupMinors rem1 
+      return (rem2, Ds dots : res)
+    F _  -> do
+      (rem1, flats) <- groupFlats (Line p l : ls)
+      (rem2, res)   <- groupMinors rem1 
+      return (rem2, Fs flats : res)
+    B b  ->
+      (fmap . fmap) (Bb b :) (groupMinors ls)
+    SB s ->
+      (fmap . fmap) (Sb s :) (groupMinors ls)
+    _    -> 
+      return (ls, [])
 groupMinors ls = return (ls, [])
-  
+
+--groupRest :: a -> [Line] -> ([Line] -> GroupResult [a]) -> [Line] -> GroupResult [a]
+--groupRest x ls f = (fmap . fmap) (x :) (f ls)
+
 groupDots :: [Line] -> GroupResult [Dot]
-groupDots (PosDot d : ls) = do
-  (ls', dots) <- groupDots ls 
-  return (ls', (getValue d) : dots) 
+groupDots (Line _ (D d) : ls) = do
+  (fmap . fmap) (d :) (groupDots ls)
 groupDots ls = return (ls, [])
 
 groupFlats :: [Line] -> GroupResult [Flat]
-groupFlats (PosFlat f : ls) = do
-  (ls', flats) <- groupFlats ls 
-  return (ls', (getValue f) : flats) 
+groupFlats (Line _ (F f) : ls) = do
+  (fmap . fmap) (f :) (groupFlats ls)
 groupFlats ls = return (ls, [])

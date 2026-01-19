@@ -6,3 +6,4 @@ me/pipeline/*
 !me/pipeline/.gitkeep
 me/md/*
 !me/md/resume.md
+me/test.hs

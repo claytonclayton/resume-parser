@@ -7,7 +7,7 @@ module Resume.Generator
   ) where
 
 import Resume.Parser 
-  ( ResumeADT (ResumeADT)
+  ( Resume (Resume)
   , Intro(Intro)
   , Section(Section)
   , Block
@@ -18,14 +18,6 @@ import Resume.Parser
   , SubBlock(SubBlock)
   , Dot(Dot)
   , Flat(Flat)
-  , Line
-    ( PosSection
-    , PosSubBlock
-    , PosBlock
-    , PosDot
-    , PosFlat
-    , PosIntro
-    )
   , BlockTraits
     (topLeft
     , topRight
