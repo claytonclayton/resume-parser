@@ -3,7 +3,6 @@
  
 module Resume.Generator 
   ( generateResume
-  , printResumes
   ) where
 
 import Resume.Parser 
@@ -57,18 +56,6 @@ tabSize = 4
 
 tabber :: Int -> Text
 tabber i = T.pack $ take (i * tabSize) $ repeat ' ' 
-
-prefixPath, texPath :: String
-prefixPath = "me/pipeline/tex/prefix.tex"
-texPath    = "me/pipeline/tex/resume.tex"
-
-printResumes :: ResumeGroup -> IO ()
-printResumes r = do
-  prefix <- readFile prefixPath 
-  let tex = generateResume r
-      out = prefix <> show tex
-  writeFile texPath out
-  putStrLn out 
 
 generateResume :: ResumeGroup -> ResumeTex
 generateResume r = ResumeTex
