@@ -7,13 +7,10 @@ module Resume.Generator
   ) where
 
 import Resume.Parser 
-  ( Resume (Resume)
-  , Intro(Intro)
+  ( Intro(Intro)
   , Section(Section)
   , Block
     ( Block
-    , blockTitle
-    , blockTraits
     )
   , SubBlock(SubBlock)
   , Dot(Dot)
@@ -25,9 +22,9 @@ import Resume.Parser
     , botRight
     )
   ) 
+
 import Resume.Grouper 
-  ( groupResume
-  , ResumeGroup
+  ( ResumeGroup
   , Major
     ( Ii
     , Ss
@@ -47,8 +44,8 @@ data ResumeTex = ResumeTex [Text]
   deriving (Eq)
 
 instance Show ResumeTex where
-  show (ResumeTex lines) = 
-    T.unpack $ T.unlines lines 
+  show (ResumeTex ls) = 
+    T.unpack $ T.unlines ls
 
 type DList = [Text] -> [Text]
 
@@ -61,15 +58,16 @@ tabSize = 4
 tabber :: Int -> Text
 tabber i = T.pack $ take (i * tabSize) $ repeat ' ' 
 
-prefixFileName = "me/pipeline/tex/prefix.tex"
-outFileName    = "me/pipeline/tex/resume.tex"
+prefixPath, texPath :: String
+prefixPath = "me/pipeline/tex/prefix.tex"
+texPath    = "me/pipeline/tex/resume.tex"
 
 printResumes :: ResumeGroup -> IO ()
 printResumes r = do
-  prefix <- readFile prefixFileName 
+  prefix <- readFile prefixPath 
   let tex = generateResume r
       out = prefix <> show tex
-  writeFile  outFileName out
+  writeFile texPath out
   putStrLn out 
 
 generateResume :: ResumeGroup -> ResumeTex
@@ -91,15 +89,18 @@ generateMajor (Ss (Section s) mis)
   . ("\\SectionEnd" :)
   . ("" :)
 
+-- test empty traits
 generateIntro :: Intro -> DList
-generateIntro (Intro ti (t:ts))
+generateIntro (Intro ti ts)
   = ("\\begin{center}" :)
   . (tabber 1 <> "\\ResumeTitle{" <> ti <> "}" :)
-  . (tabber 1 <> "\\small " <> foldl (\a b -> (a <> " $|$ " <> process b)) t ts :) -- check foldr / foldl efficiency
+  . case ts of 
+      [] -> id
+      _  -> (tabber 1 <> "\\small " <> (T.intercalate " $|$ " . fmap underline) ts :) 
   . ("\\end{center}" :)
   . ("":)
   where 
-    process t
+    underline t
       | any (`T.isInfixOf` t) ["@", "/"] = "\\underline{\\url{" <> t <> "}}" -- doesn't work with emails currently
       | otherwise = t
 

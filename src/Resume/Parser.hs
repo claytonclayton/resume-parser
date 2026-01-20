@@ -11,10 +11,7 @@ module Resume.Parser
   , SubBlock (SubBlock)
   , Dot (Dot)
   , Flat (Flat)
-  , Parser
   , parseResume
-  , parseSep
-  , defaultBlockTraits
   , Element
     ( I
     , S
@@ -47,15 +44,13 @@ import Text.Megaparsec hiding (State)
 import Text.Megaparsec.Char
 import qualified Data.Text as T
 import Control.Monad 
-import Control.Monad.Trans.Maybe
-import Control.Monad.Trans.Class
 
 data Resume = Resume [Line]
   deriving (Eq)
 
 instance Show Resume where
-  show (Resume lines) =
-    unlines (fmap show lines) 
+  show (Resume ls) =
+    unlines (fmap show ls) 
 
 data Intro = Intro
   { title      :: Text
@@ -149,7 +144,7 @@ parseSep c =
 parseIntro :: Parser Intro
 parseIntro = do 
   title  <- char '#' *> hspace *> parseChars
-  newline
+  void $ newline
   traits <- parseSep '|'
   return Intro {..}
  
@@ -191,7 +186,7 @@ parseBlockStart = do
 parseBlockEnd :: Parser Block
 parseBlockEnd = do
   blockTitle  <- parseChars 
-  newline
+  void $ newline
   blockTraits <- parseBlockTraits
   return Block {..}
 
@@ -230,7 +225,7 @@ parseLine = do
 -- many "\n" inefficient?
 parseResume :: Parser Resume
 parseResume = do
-  many "\n"
-  lines <- many $ parseLine <* many "\n" 
-  return $ Resume lines
+  void $ many "\n"
+  ls <- many $ parseLine <* many "\n" 
+  return $ Resume ls
 

@@ -10,13 +10,11 @@ import Resume.Parser
 
 import Resume.Grouper 
   ( groupResume
-  , ResumeGroup
   , GroupError
   )
 
 import Resume.Generator 
   ( generateResume
-  , printResumes
   )
 
 import Resume.Preprocessor
@@ -24,23 +22,19 @@ import Resume.Preprocessor
   ) 
 
 import Text.Megaparsec 
-import System.Environment (getArgs)
 import qualified Data.Text.IO as TIO
 import qualified Data.Text as T
-import qualified Data.Text.Lazy.Builder as B
-import Data.Text.Lazy (toStrict)
 import Data.Text (Text)
 import Data.Maybe
 import Data.Bifunctor
 import Data.Void
 import Control.Monad.Trans.Except
-import Control.Monad.Trans.Maybe
 import Control.Monad.Trans
-import Control.Monad
 
 import System.Process
 import System.Exit
 
+defaultMdPath, texPath, outPath, auxPath, prefixPath  :: String
 defaultMdPath = "me/md/resume.md"
 texPath = "me/pipeline/tex/resume.tex"
 outPath = "me/pipeline/pdf"
@@ -60,17 +54,17 @@ instance Show RenderError where
 -- maybe convert to simply Either and move effects elsewhere
 transpile :: Text -> ExceptT RenderError IO Text 
 transpile md = do
-  lines  <- except $ first PErr $ runParser parseResume "" $ preprocess md
-  groups <- except $ first GErr $ groupResume lines
+  line  <- except $ first PErr $ runParser parseResume "" $ preprocess md
+  group <- except $ first GErr $ groupResume line
   prefix <- lift $ readFile prefixPath
-  let tex = (<>) prefix $ show $ generateResume groups
+  let tex = (<>) prefix $ show $ generateResume group
   lift $ writeFile texPath tex
   return $ T.pack tex
 
 render :: Maybe FilePath -> ExceptT RenderError IO ()
 render mdPath = do
-  md  <- lift $ TIO.readFile $ fromMaybe defaultMdPath mdPath
-  res <- transpile md   
+  md <- lift $ TIO.readFile $ fromMaybe defaultMdPath mdPath
+  _  <- transpile md   
 
   let 
     args =

@@ -1,9 +1,8 @@
 # resume-parser
 
 ## Roadmap
-- [ ] implement 'parse' button (maybe think of a better name. transpile?).   
-      converts from md to latex then either shows the user an error or complete status.
-    - [ ] produce some failing md test cases
+- [ ] implement render button. converts from md to latex then either shows the user an error or complete status.
+    - [x] produce parse errors
         - [x] download hoogle cli
         - [x] understand liftM, runMaybeT stackoverflow post 
         - [x] refactor parseLine using unlawful \*> 
@@ -11,18 +10,20 @@
         - [x] refactor Grouper
         - [x] refactor Cli and Render with System.Process
         - [x] refactor parseBlockTraits with unlawful \*>
-        - [x] produce parse errors
-        - [ ] produce group errors 
-        - [ ] produce latexmk errors?
-    - [ ] haskell nvim error highlight plugin?
-    - [ ] QuickCheck?
+    - [ ] produce group errors 
+        - [ ] implement RemainingLines error
     - [ ] display basic errors on front end
+    - [ ] produce latexmk errors?
+    - [ ] haskell nvim error highlight plugin?
     - [ ] add line numbers to md box. see codeforces
-- [ ] implement 'render' button 
     - [ ] open pdf in new tab
     - [ ] show preview box
+- [ ] begin test suite 
+    - [ ] QuickCheck?
+    - [ ] unit tests
 - [ ] sanitise input
-- [ ] peruse competitors githubs
+    - [ ] mv Preprocessor.hs Sanitiser.hs
+- [ ] peruse Competitors githubs
     - [ ] rendercv
     - [ ] SmartResume
     - [ ] Resumey.Pro
@@ -36,6 +37,8 @@
 - [ ] work on the front end. probs react
     - [ ] get inspired by bearblog github
 - [ ] implement italics, bolds, strikethroughs
+- [ ] begin linter
+- [ ] refactor Grouper with State
 
 ## Features I want
 - [ ] AI that converts resume pdfs into md

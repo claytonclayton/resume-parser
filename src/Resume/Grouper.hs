@@ -19,24 +19,15 @@ module Resume.Grouper
   where
 
 import Resume.Parser 
-  ( Resume(Resume)
+  ( Resume (Resume)
   , Intro
-  , Section(Section
-  , sectionTitle)
-  , Block(Block)
-  , BlockTraits
-    (topLeft
-    , topRight
-    , botLeft
-    , botRight
-    )
-  , SubBlock(SubBlock)
-  , Dot(Dot)
-  , Flat(Flat)
+  , Section 
+  , Block 
+  , SubBlock
+  , Dot
+  , Flat
   , Line
     ( Line
-    , getPos
-    , getVal
     )
   , Element
     ( I
@@ -47,11 +38,6 @@ import Resume.Parser
     , F
     )
   ) 
-
-import Text.Megaparsec hiding (State)
-import Data.Text (Text)
-import qualified Data.Text as T
-import Control.Monad (when)
 
 type ResumeGroup = [Major]
 
@@ -72,10 +58,9 @@ type GroupResult a = Either GroupError ([Line], a)
 groupResume :: Resume -> Either GroupError ResumeGroup
 groupResume (Resume ls) = do
   (ls', res) <- groupResume' ls
-  Right res
-  --case ls' of
-  --  [] -> Left RemainingLines -- should include what lines were not included
-  --  _  -> Right res
+  case ls' of
+    [] -> Right res
+    _  -> Left RemainingLines -- should include what lines were not included
 
 groupResume' :: [Line] -> GroupResult ResumeGroup
 groupResume' (Line _ (I i) : ls) = 
