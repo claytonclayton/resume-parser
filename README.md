@@ -10,8 +10,11 @@
         - [x] refactor Grouper
         - [x] refactor Cli and Render with System.Process
         - [x] refactor parseBlockTraits with unlawful \*>
-    - [ ] produce group errors 
-        - [ ] implement RemainingLines error
+    - [ ] create documentation for anna
+        - [ ] add comments on all files
+        - [ ] add app explanation to README
+        - [ ] add cli usage explanation to README
+    - [ ] remove gitignored files on all versions of the repo
     - [ ] display basic errors on front end
     - [ ] produce latexmk errors?
     - [ ] haskell nvim error highlight plugin?
@@ -21,6 +24,8 @@
 - [ ] begin test suite 
     - [ ] QuickCheck?
     - [ ] unit tests
+    - [ ] produce group errors 
+    - [ ] implement RemainingLines error
 - [ ] sanitise input
     - [ ] mv Preprocessor.hs Sanitiser.hs
 - [ ] peruse Competitors githubs
@@ -39,9 +44,12 @@
 - [ ] implement italics, bolds, strikethroughs
 - [ ] begin linter
 - [ ] refactor Grouper with State
+- [ ] refactor Generator to use only neccessary amount of optional latex args
+      eg. don't use Block{}[][][][]
+- [ ] deploy!
 
 ## Features I want
-- [ ] AI that converts resume pdfs into md
+- [ ] algorithm that converts resume pdfs into md
 - [ ] database that saves your md files
 - [ ] linter
     - [ ] spell check
