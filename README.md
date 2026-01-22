@@ -49,7 +49,7 @@ Alternatively I think you can just download latexmk directly here too.
 https://mgeier.github.io/latexmk.html
 
 ### Running the server
-Then make sure you are in the project root directory and run ```stack run server``` or alternatively run the script ```me/scripts/./server.sh``` (make sure you chmod 775 this file first), and then the server will be up and running. An extremely basic front end is implemented in static/index.html (fully AI generated because I have never written front end before). Access the front page at:
+Then make sure you are in the project root directory and run ```stack run server``` or alternatively run the script ```me/scripts/./server.sh``` (make sure you chmod 775 this file first), and then the server will be up and running. An extremely basic front end is implemented in ```static/index.html``` (fully AI generated because I have never written front end before). Access the front page at:
 
 http://localhost:3000/  
 
