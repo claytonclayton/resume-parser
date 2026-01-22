@@ -1,6 +1,7 @@
 .stack-work/
 *~
-me/aux
+me/aux/*
+!me/aux/.gitkeep
 me/friends-resumes
 me/pipeline/pdf
 me/pipeline/tex
