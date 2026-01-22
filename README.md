@@ -37,7 +37,7 @@ After you git clone the project you will need to download ghcup to run the serve
 
 https://www.haskell.org/ghcup/
 
-Haskell is pretty massive so it might take 5-10 mins to download. After it has finished use the command 'ghcup tui' to make sure you have GHC 9.6.7 installed.
+Haskell is pretty massive so it might take 5-10 mins to download. After it has finished use the command ```ghcup tui``` to make sure you have GHC 9.6.7 installed.
 
 ### Running the server
 Then make sure you are in the project root directory and run 'stack run server' or alternatively run the script 'me/scripts/./server.sh' (make sure you chmod 775 this file first), and then the server will be up and running. An extremely basic front end is implemented in static/index.html (fully AI generated because I have never written front end before). Access the front page at:
