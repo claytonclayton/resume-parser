@@ -1,6 +1,6 @@
 #!/bin/sh
 
-exec_name="resume-gen"
+exec_name="gen"
 pdf_path="me/pipeline/pdf/resume.pdf"
 
 if [ $# -ne 0 ]; then
