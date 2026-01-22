@@ -3,7 +3,8 @@
 me/aux
 me/friends-resumes
 me/pipeline/*
-!me/pipeline/.gitkeep
+!me/pipeline/pdf/resume.pdf
+!me/pipeline/tex/resume.tex
 me/md/*
 !me/md/resume.md
 me/test.hs
