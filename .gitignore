@@ -3,6 +3,8 @@
 me/aux
 me/friends-resumes
 me/pipeline/*
+!me/pipeline/pdf
+!me/pipeline/tex
 !me/pipeline/pdf/resume.pdf
 !me/pipeline/tex/resume.tex
 me/md/*
