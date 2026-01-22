@@ -1,6 +1,7 @@
 
 module Resume.Render 
-  ( executeRender
+  ( render
+  , executeRender
   , executeTranspile
   ) where
 
@@ -54,17 +55,21 @@ instance Show RenderError where
 -- maybe convert to simply Either and move effects elsewhere
 transpile :: Text -> ExceptT RenderError IO Text 
 transpile md = do
-  line  <- except $ first PErr $ runParser parseResume "" $ preprocess md
-  group <- except $ first GErr $ groupResume line
+  line   <- except $ first PErr $ runParser parseResume "" $ preprocess md
+  group  <- except $ first GErr $ groupResume line
   prefix <- lift $ readFile prefixPath
   let tex = (<>) prefix $ show $ generateResume group
   lift $ writeFile texPath tex
   return $ T.pack tex
 
-render :: Maybe FilePath -> ExceptT RenderError IO ()
-render mdPath = do
+renderFile :: Maybe FilePath -> ExceptT RenderError IO ()
+renderFile mdPath = do
   md <- lift $ TIO.readFile $ fromMaybe defaultMdPath mdPath
-  _  <- transpile md   
+  render md
+
+render :: Text -> ExceptT RenderError IO ()
+render md = do
+  _  <- transpile md 
 
   let 
     args =
@@ -83,7 +88,7 @@ render mdPath = do
 
 executeRender :: Maybe FilePath -> IO ()
 executeRender mdPath = do
-  result <- runExceptT (render mdPath)
+  result <- runExceptT $ renderFile mdPath
   case result of
     Left err -> print err
     Right _  -> return ()

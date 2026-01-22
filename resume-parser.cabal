@@ -41,6 +41,7 @@ library
   build-depends:
       base >=4.7 && <5
     , directory
+    , http-types
     , megaparsec
     , mtl
     , process
@@ -50,7 +51,7 @@ library
     , wai-middleware-static
   default-language: Haskell2010
 
-executable resume-gen
+executable gen
   main-is: Cli.hs
   hs-source-dirs:
       app
@@ -58,6 +59,7 @@ executable resume-gen
   build-depends:
       base >=4.7 && <5
     , directory
+    , http-types
     , megaparsec
     , mtl
     , process
@@ -68,7 +70,7 @@ executable resume-gen
     , wai-middleware-static
   default-language: Haskell2010
 
-executable resume-server
+executable server
   main-is: Main.hs
   other-modules:
       Cli
@@ -81,6 +83,7 @@ executable resume-server
   build-depends:
       base >=4.7 && <5
     , directory
+    , http-types
     , megaparsec
     , mtl
     , process
@@ -104,6 +107,7 @@ test-suite resume-parser-test
   build-depends:
       base >=4.7 && <5
     , directory
+    , http-types
     , megaparsec
     , mtl
     , process

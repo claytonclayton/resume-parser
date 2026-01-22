@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    textarea {
+      width: 80%;
+      height: 400px;
+      font-family: monospace;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+
+<body>
+  <textarea id="input"></textarea>
+  <br>
+  <button onclick="send()">Render</button>
+
+  <script>
+    async function send() {
+      const text = document.getElementById("input").value;
+
+    const res = await fetch("/render", {
+      method: "POST",
+      headers: { "Content-Type": "text/plain" },
+      body: text
+    });
+    
+    if (!res.ok) {
+      const errText = await res.text();
+      alert("error: " + errText);
+      return;
+    }
+
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      window.open(url);
+    }
+  </script>
+</body>
+</html>
+

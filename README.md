@@ -11,6 +11,8 @@
         - [x] refactor Cli and Render with System.Process
         - [x] refactor parseBlockTraits with unlawful \*>
     - [ ] create documentation for anna
+        - [x] make basic render button work on frontend
+        - [ ] make fast cli
         - [ ] add comments on all files
         - [ ] add app explanation to README
         - [ ] add cli usage explanation to README
@@ -21,6 +23,7 @@
     - [ ] add line numbers to md box. see codeforces
     - [ ] open pdf in new tab
     - [ ] show preview box
+- [ ] begin linter
 - [ ] begin test suite 
     - [ ] QuickCheck?
     - [ ] unit tests
@@ -42,7 +45,6 @@
 - [ ] work on the front end. probs react
     - [ ] get inspired by bearblog github
 - [ ] implement italics, bolds, strikethroughs
-- [ ] begin linter
 - [ ] refactor Grouper with State
 - [ ] refactor Generator to use only neccessary amount of optional latex args
       eg. don't use Block{}[][][][]

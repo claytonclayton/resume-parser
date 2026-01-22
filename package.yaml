@@ -29,6 +29,7 @@ dependencies:
 - process
 - transformers
 - mtl
+- http-types
 
 ghc-options:
 - -Wall
@@ -45,7 +46,7 @@ library:
   source-dirs: src
 
 executables:
-  resume-server:
+  server: 
     main:                Main.hs
     source-dirs:         app
     ghc-options:
@@ -56,7 +57,7 @@ executables:
     - resume-parser
     - scotty
 
-  resume-gen:
+  gen:
     main:                Cli.hs
     source-dirs:         app
     other-modules:       []
