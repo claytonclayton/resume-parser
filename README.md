@@ -66,7 +66,7 @@ server =
       -- do more stuff
 ```
 
-This is a condensed version of the file at src/Resume/Server.hs. All this means is the site is exposed at port 3000, and that you can ```GET /``` and ```POST /render```. Unfortunately these are all the endpoints we have exposed at the moment. The next step will be to work on the lint button.
+This is a condensed version of the file at ```src/Resume/Server.hs```. All this means is the site is exposed at port 3000, and that you can ```GET /``` and ```POST /render```. Unfortunately these are all the endpoints we have exposed at the moment. The next step will be to work on the lint button.
 
 ### And away you go!
 And that's the bare minimum you need to start writing the frontend! Make it look any way you like as long as it roughly adheres to requirements in the Features section above. Most important thing to remember is to take your time. According to the commit history I've spent like 2-3 months on this already which is insanely slow. It's probably due to not consistently working on this everyday, which I plan to do while staying at bruce so hopefully my speed picks up.
@@ -78,12 +78,12 @@ If you want some extra knowledge I have added some extra optional material below
 ## How to use the CLI
 Alongside the server, there is also an accompanying cli!   
 
-Use the command ```me/scripts/./gen.sh``` to run the cli. When given no arguments it will convert the file at me/md/resume.md into the pdf at me/pipeline/pdf/resume.pdf. You can give it a file path as an argument too and it will convert that file into the pdf at the same location stated previously.  
+Use the command ```me/scripts/./gen.sh``` to run the cli. When given no arguments it will convert the file at ```me/md/resume.md``` into the pdf at ```me/pipeline/pdf/resume.pdf```. You can give it a file path as an argument too and it will convert that file into the pdf at the same location stated previously.  
 
 Currently this command runs pretty slow because it includes building the entire project, as well as some other reasons. I will make a faster version in the future.
 
 ## The backend program structure
-The main flow of the program exists in src/Resume/Render.hs. This program calls the following programs in the order: Preprocessor.hs ->  Parser.hs -> Grouper.hs -> Generator.hs. The preprocessor sanitises the input (to avoid me getting hacked lol) -> the parser isolates each element of the input -> the grouper groups these elements into a more ordered data structure -> and then the generator converts this data structure into latex, which is later rendered into a pdf via latexmk. 
+The main flow of the program exists in ```src/Resume/Render.hs```. This program calls the following programs in the order: Preprocessor.hs ->  Parser.hs -> Grouper.hs -> Generator.hs. The preprocessor sanitises the input (to avoid me getting hacked lol) -> the parser isolates each element of the input -> the grouper groups these elements into a more ordered data structure -> and then the generator converts this data structure into latex, which is later rendered into a pdf via latexmk. 
 
 If you would like some tips on how to read Haskell, just ask me.
 
@@ -92,7 +92,7 @@ I only have one template made so far, but I have this feeling that it would be p
 
 https://www.overleaf.com/gallery/tagged/cv
 
-Honestly I think you could just paste my template at me/pipeline/tex/resume.tex into chatgpt alongside one of the templates above and ask it to rewrite the template in my styling. If you want to do it yourself, just ask me and I can give you a crash course. 
+Honestly I think you could just paste my template at ```me/pipeline/tex/resume.tex``` into chatgpt alongside one of the templates above and ask it to rewrite the template in my styling. If you want to do it yourself, just ask me and I can give you a crash course. 
 
 ## Inline comments
 I haven't really written any comments within my code lol, but if you would like me to, just ask.  
