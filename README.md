@@ -1,4 +1,4 @@
-# The Short Explanation
+# A Short Explanation
 The goal is to make a website where you can type out your resume in markdown and then have it be converted into a pretty resume pdf. 
 
 Below is me trying my best to quickly explain the features I am working towards, and how get started as soon as possible.
@@ -39,8 +39,17 @@ https://www.haskell.org/ghcup/
 
 Haskell is pretty massive so it might take 5-10 mins to download. After it has finished use the command ```ghcup tui``` to make sure you have GHC 9.6.7 installed.
 
+### Install latexmk
+You will also need to download latexmk. Essentially the program just transpiles markdown into latex and then I just use a latex renderer to make the pdf. If you have a mac, you can download MacTex which just gets you latexmk automatically.
+
+https://www.tug.org/mactex/mactex-download.html
+
+Alternatively I think you can just download latexmk directly here too. 
+
+https://mgeier.github.io/latexmk.html
+
 ### Running the server
-Then make sure you are in the project root directory and run 'stack run server' or alternatively run the script 'me/scripts/./server.sh' (make sure you chmod 775 this file first), and then the server will be up and running. An extremely basic front end is implemented in static/index.html (fully AI generated because I have never written front end before). Access the front page at:
+Then make sure you are in the project root directory and run ```stack run server``` or alternatively run the script ```me/scripts/./server.sh``` (make sure you chmod 775 this file first), and then the server will be up and running. An extremely basic front end is implemented in static/index.html (fully AI generated because I have never written front end before). Access the front page at:
 
 http://localhost:3000/  
 
@@ -57,9 +66,39 @@ server =
       -- do more stuff
 ```
 
-# The Long Explanation
+This is a condensed version of the file at src/Resume/Server.hs. All this means is the site is exposed at port 3000, and that you can ```GET /``` and ```POST /render```. Unfortunately these are all the endpoints we have exposed at the moment. The next step will be to work on the lint button.
 
-## Roadmap
+### And away you go!
+And that's the bare minimum you need to start writing the frontend! Make it look any way you like as long as it roughly adheres to requirements in the Features section above. Most important thing to remember is to take your time. According to the commit history I've spent like 2-3 months on this already which is insanely slow. It's probably due to not consistently working on this everyday, which I plan to do while staying at bruce so hopefully my speed picks up.
+
+If you want some extra knowledge I have added some extra optional material below that may help. Also be sure to check out the 'Roadmap' and 'Features I want' section at the very end of the README. Feel free to make a roadmap for the frontend too if you would like.
+
+# The Optional Stuff
+
+## How to use the CLI
+Alongside the server, there is also an accompanying cli!   
+
+Use the command ```me/scripts/./gen.sh``` to run the cli. When given no arguments it will convert the file at me/md/resume.md into the pdf at me/pipeline/pdf/resume.pdf. You can give it a file path as an argument too and it will convert that file into the pdf at the same location stated previously.  
+
+Currently this command runs pretty slow because it includes building the entire project, as well as some other reasons. I will make a faster version in the future.
+
+## The backend program structure
+The main flow of the program exists in src/Resume/Render.hs. This program calls the following programs in the order: Preprocessor.hs ->  Parser.hs -> Grouper.hs -> Generator.hs. The preprocessor sanitises the input (to avoid me getting hacked lol) -> the parser isolates each element of the input -> the grouper groups these elements into a more ordered data structure -> and then the generator converts this data structure into latex, which is later rendered into a pdf via latexmk. 
+
+If you would like some tips on how to read Haskell, just ask me.
+
+## How to make your own resume template
+I only have one template made so far, but I have this feeling that it would be pretty easy to alter existing latex templates to fit our program. 
+
+https://www.overleaf.com/gallery/tagged/cv
+
+Honestly I think you could just paste my template at me/pipeline/tex/resume.tex into chatgpt alongside one of the templates above and ask it to rewrite the template in my styling. If you want to do it yourself, just ask me and I can give you a crash course. 
+
+## Inline comments
+I haven't really written any comments within my code lol, but if you would like me to, just ask.  
+
+# TODOs
+## Backend Roadmap
 - [ ] implement render button. converts from md to latex then either shows the user an error or complete status.
     - [x] produce parse errors
         - [x] download hoogle cli
