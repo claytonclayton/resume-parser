@@ -1,5 +1,5 @@
 # The Project!
-The goal is to make a website where you can type out your resume in markdown and then have it be converted into a pretty resume pdf. To see an example of a markdown input check out ```me/md/resume.md``` and to see its pdf counterpart check out ```me/pipeline/pdf/latex.pdf```.
+The goal is to make a website where you can type out your resume in markdown and then have it be converted into a pretty resume pdf. To see an example of a markdown input check out ```me/md/resume.md```, and to see its pdf counterpart check out ```me/pipeline/pdf/resume.pdf```.
 
 Below is me trying my best to quickly explain the features I am working towards, and how get started as soon as possible.
 
