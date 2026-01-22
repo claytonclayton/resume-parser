@@ -1,7 +1,7 @@
 # The Short Explanation
 The goal is to make a website where you can type out your resume in markdown and then have it be converted into a pretty resume pdf. 
 
-Below is me trying my best to quickly explain my goals, how to run the backend, and get started as soon as possible.
+Below is me trying my best to quickly explain the features I am working towards, and how get started as soon as possible.
 
 ## Features
 Here are the main features I am working towards in order of importance:
@@ -31,8 +31,31 @@ I also have this idea of adding a $1 per 100 years subscription service lol. The
  
 That's basically it! Scroll down to the bottom of the README to see some other feature ideas I have. Feel free to add more yourself.
 
-## Get Started
-cat
+## Getting Started
+### Install ghcup
+After you git clone the project you will need to download ghcup to run the server (there is no docker instance for the project yet). Use the link below.
+
+https://www.haskell.org/ghcup/
+
+Haskell is pretty massive so it might take 5-10 mins to download. After it has finished use the command 'ghcup tui' to make sure you have GHC 9.6.7 installed.
+
+### Running the server
+Then make sure you are in the project root directory and run 'stack run server' or alternatively run the script 'me/scripts/./server.sh' (make sure you chmod 775 this file first), and then the server will be up and running. An extremely basic front end is implemented in static/index.html (fully AI generated because I have never written front end before). Access the front page at:
+
+http://localhost:3000/  
+
+### Comprehending the server
+```
+server :: IO ()
+server = 
+  scotty 3000 $ do
+
+    get "/" $ do 
+      -- do stuff
+
+    post "/render" $ do
+      -- do more stuff
+```
 
 # The Long Explanation
 

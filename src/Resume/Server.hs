@@ -10,7 +10,6 @@ import Network.HTTP.Types (status500)
 import qualified Data.Text.Lazy as TL
 import Control.Monad.Trans.Class
 
--- Import your logic module
 import Resume.Render (render) 
 
 server :: IO ()
@@ -33,6 +32,8 @@ server =
         Left err -> do
           status status500
           text $ TL.pack $ show err
+          lift $ putStrLn $ "error: " <> show err
         
         Right _ -> do
+          lift $ putStrLn "md successfully rendered!"
           file "me/pipeline/pdf/resume.pdf"
