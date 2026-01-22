@@ -1,4 +1,4 @@
-# A Short Explanation
+# The Project!
 The goal is to make a website where you can type out your resume in markdown and then have it be converted into a pretty resume pdf. 
 
 Below is me trying my best to quickly explain the features I am working towards, and how get started as soon as possible.
@@ -108,25 +108,24 @@ I haven't really written any comments within my code lol, but if you would like 
         - [x] refactor Grouper
         - [x] refactor Cli and Render with System.Process
         - [x] refactor parseBlockTraits with unlawful \*>
-    - [ ] create documentation for anna
+    - [x] create documentation for anna
         - [x] make basic render button work on frontend
-        - [ ] add comments on all files
-        - [ ] add app explanation to README
-        - [ ] add cli usage explanation to README
-    - [ ] remove gitignored files on all versions of the repo
-    - [ ] display basic errors on front end
-    - [ ] produce latexmk errors?
+        - [x] add app explanation to README
+        - [x] add cli usage explanation to README
+    - [x] display basic errors on front end
+    - [x] open pdf in new tab
+    - [ ] handle latexmk errors
+        - [ ] research haskell handle pattern
+        - [ ] give Render.render an option to suppress latexmk prompts/stdout
     - [ ] haskell nvim error highlight plugin?
     - [ ] add line numbers to md box. see codeforces
-    - [ ] open pdf in new tab
-    - [ ] show preview box
-- [ ] make fast cli
 - [ ] begin linter
 - [ ] begin test suite 
     - [ ] QuickCheck?
     - [ ] unit tests
     - [ ] produce group errors 
     - [ ] implement RemainingLines error
+- [ ] make fast cli
 - [ ] sanitise input
     - [ ] mv Preprocessor.hs Sanitiser.hs
 - [ ] peruse Competitors githubs
@@ -136,6 +135,7 @@ I haven't really written any comments within my code lol, but if you would like 
     - [ ] markdown-resume
     - [ ] check out markdown real time render web apps
     - [ ] check out typst resume templates
+- [ ] remove gitignored files on all versions of the repo
 - [ ] fix intro email link
 - [ ] sublists (see julie resume)
 - [ ] block title wrap (see scott resume)
