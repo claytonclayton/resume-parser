@@ -1,7 +1,9 @@
 # resume-parser
 
 ## The Short Explanation
-The goal is to make a website where you can type out your resume in markdown and then have it be converted into a pretty resume pdf. Below is me trying my best to quickly explain my goals, how to run the backend, and get started as soon as possible.
+The goal is to make a website where you can type out your resume in markdown and then have it be converted into a pretty resume pdf. 
+
+Below is me trying my best to quickly explain my goals, how to run the backend, and get started as soon as possible.
 
 ### Features
 Here are the main features I am working towards in order of importance:
