@@ -1,44 +1,42 @@
-# resume-parser
-
-## The Short Explanation
+# The Short Explanation
 The goal is to make a website where you can type out your resume in markdown and then have it be converted into a pretty resume pdf. 
 
 Below is me trying my best to quickly explain my goals, how to run the backend, and get started as soon as possible.
 
-### Features
+## Features
 Here are the main features I am working towards in order of importance:
 
-#### The render button
+### The render button
 The front page will contain a large text box where you can type out your resume and underneath it there will be a button that says 'render'. When you click it, it will download your resume in pdf form
 
-#### The lint button
+### The lint button
 underneath the text box there will also be a button that says 'lint'. after clicking it, it basically performs a spell check on the text you put in the textbox. Incorrect spellings, missing full stops, uncapitalised letters will be highlighted in red. Hovering over the highlighted text opens a small text panel on the right hand side of the text box, which displays an explanation of the error. Next to the lint button will also be an 'auto-lint' button which automatically fixes all mistakes you've made.
 
-#### Template showcase
+### Template showcase
 The website will have a series of resume templates to choose from. Underneath the render button there should be a drop down menu of some sort displaying all the template types. There should also be a separate page to the front page where you can browse all the templates in a more comfortable way.
 
 Honestly if we implement all three of these things we could totally wrap up the project, but if we have time there are additional goals we could work towards
 
-#### Embed images
+### Embed images
 Be able to upload images to the site and embed them into your resume. Some people like putting in headshots or photos of their work in their resmes so this is probs important.
 
-#### Pdf to pdf conversion
+### Pdf to pdf conversion
 Write an algorithm that converts a pdf resume into markdown format and then back into pdf. Allows users to convert their already made resumes into the templates we have on our site.
 
-#### Create an account to save previous work
+### Create an account to save previous work
 Allow users to create an account and have their previous md files saved. Could include a basic version control system that allows you to go back to previous versions of resumes you've written.
 
-#### Subscription service
+### Subscription service
 I also have this idea of adding a $1 per 100 years subscription service lol. The idea is that if our friends want to help chip in we'll be able to write on our actual resumes something like "developed a web app with a paid subscription service, serving 10 clients concurrently.". Am I a genius or what? The subscrition model will allow users to create the account described above, which is actually a neccessity since allowing users to make accounts for free might let evil users flood the database with noise.
  
 That's basically it! Scroll down to the bottom of the README to see some other feature ideas I have. Feel free to add more yourself.
 
-### Get Started
+## Get Started
 cat
 
-## The Long Explanation
+# The Long Explanation
 
-### Roadmap
+## Roadmap
 - [ ] implement render button. converts from md to latex then either shows the user an error or complete status.
     - [x] produce parse errors
         - [x] download hoogle cli
@@ -89,7 +87,7 @@ cat
         - [ ] make fast cli
 - [ ] deploy!
 
-### Features I want
+## Features I want
 - [ ] algorithm that converts resume pdfs into md
 - [ ] database that saves your md files
 - [ ] linter
