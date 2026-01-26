@@ -1,8 +1,12 @@
 
 module Resume.Render 
   ( render
+  , runRender
   , executeRender
+  , executeRenderFile
   , executeTranspile
+  , serverConfig
+  , cliConfig
   ) where
 
 import Resume.Parser  
@@ -31,6 +35,7 @@ import Data.Bifunctor
 import Data.Void
 import Control.Monad.Trans.Except
 import Control.Monad.Trans
+import Control.Monad.Reader
 
 import System.Process
 import System.Exit
@@ -52,6 +57,22 @@ instance Show RenderError where
   show (GErr g) = show g
   show (ExitCode i) = "exit code: " <> show i 
 
+data Config = Config
+  { quietRender :: Bool
+  } 
+
+serverConfig :: Config
+serverConfig = Config 
+  { quietRender = True
+  }
+
+cliConfig :: Config
+cliConfig = Config
+  { quietRender = False
+  }
+
+type RenderM a = ReaderT Config (ExceptT RenderError IO) a 
+
 -- maybe convert to simply Either and move effects elsewhere
 transpile :: Text -> ExceptT RenderError IO Text 
 transpile md = do
@@ -62,14 +83,9 @@ transpile md = do
   lift $ writeFile texPath tex
   return $ T.pack tex
 
-renderFile :: Maybe FilePath -> ExceptT RenderError IO ()
-renderFile mdPath = do
-  md <- lift $ TIO.readFile $ fromMaybe defaultMdPath mdPath
-  render md
-
-render :: Text -> ExceptT RenderError IO ()
+render :: Text -> RenderM ()
 render md = do
-  _  <- transpile md 
+  _  <- lift $ transpile md 
 
   let 
     args =
@@ -79,19 +95,27 @@ render md = do
       , texPath
       ]
 
-  (_, _, _, ph) <- lift $ createProcess (proc "latexmk" args)
-  exitCode      <- lift $ waitForProcess ph
+  (_, _, _, ph) <- liftIO $ createProcess (proc "latexmk" args)
+  exitCode      <- liftIO $ waitForProcess ph
 
   case exitCode of
-    ExitSuccess   -> pure ()
-    ExitFailure c -> throwE $ ExitCode c
+    ExitSuccess   -> return ()
+    ExitFailure c -> lift $ throwE $ ExitCode c
 
-executeRender :: Maybe FilePath -> IO ()
-executeRender mdPath = do
-  result <- runExceptT $ renderFile mdPath
+executeRender :: Config -> Text -> IO ()
+executeRender config md = do
+  result <- runRender config md
   case result of
     Left err -> print err
     Right _  -> return ()
+
+executeRenderFile :: Config -> Maybe FilePath -> IO ()
+executeRenderFile config mdPath = do
+  md <- TIO.readFile $ fromMaybe defaultMdPath mdPath
+  executeRender config md
+
+runRender :: Config -> Text -> IO (Either RenderError ())
+runRender config md = runExceptT $ runReaderT (render md) config
 
 executeTranspile :: Maybe FilePath -> IO ()
 executeTranspile mdPath = do

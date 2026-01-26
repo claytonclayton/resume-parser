@@ -117,6 +117,7 @@ I haven't really written any comments within my code lol, but if you would like 
 - [ ] handle latexmk errors
     - [x] research haskell handle pattern
     - [x] research readert pattern
+    - [x] refactor render with ReaderT
     - [ ] give Render.render an option to suppress latexmk prompts/stdout
 - [ ] haskell nvim error highlight plugin
     - [ ] browse reddit

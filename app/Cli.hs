@@ -2,7 +2,8 @@
 module Cli (main) where
 
 import Resume.Render
-  ( executeRender
+  ( executeRenderFile
+  , cliConfig
   )
 
 import System.Environment (getArgs)
@@ -12,6 +13,6 @@ main :: IO ()
 main = do
   args <- getArgs
   case args of
-    []  -> executeRender Nothing
-    [x] -> executeRender $ Just x
+    [ ] -> executeRenderFile cliConfig Nothing
+    [x] -> executeRenderFile cliConfig $ Just x
     _   -> print "error: Cli.hs expects 0-1 arguments"

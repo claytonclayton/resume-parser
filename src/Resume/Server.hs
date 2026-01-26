@@ -3,14 +3,16 @@ module Resume.Server (server) where
 
 import Web.Scotty
 import Network.Wai.Middleware.Static
-import Control.Monad.Trans.Except (runExceptT)
 import Data.Text.Lazy (toStrict)
 import Data.Text.Lazy.Encoding (decodeUtf8)
 import Network.HTTP.Types (status500)
 import qualified Data.Text.Lazy as TL
 import Control.Monad.Trans.Class
 
-import Resume.Render (render) 
+import Resume.Render 
+  ( runRender
+  , serverConfig
+  ) 
 
 server :: IO ()
 server = 
@@ -25,8 +27,8 @@ server =
     post "/render" $ do
       bodyText <- body
 
-      let mdInput = toStrict $ decodeUtf8 bodyText
-      result <- lift $ runExceptT (render mdInput)
+      let md = toStrict $ decodeUtf8 bodyText
+      result <- lift $ runRender serverConfig md
 
       case result of
         Left err -> do
