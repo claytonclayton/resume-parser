@@ -85,15 +85,21 @@ transpile md = do
 
 render :: Text -> RenderM ()
 render md = do
-  _  <- lift $ transpile md 
+  _       <- lift $ transpile md 
+  isQuiet <- asks quietRender
 
   let 
-    args =
+    argBase =
       [ "-pdf"
       , "-auxdir=" ++ auxPath
       , "-outdir=" ++ outPath
       , texPath
       ]
+    quietArg = 
+      if isQuiet
+      then ("-quiet" :)
+      else id
+    args = quietArg argBase
 
   (_, _, _, ph) <- liftIO $ createProcess (proc "latexmk" args)
   exitCode      <- liftIO $ waitForProcess ph

@@ -114,11 +114,11 @@ I haven't really written any comments within my code lol, but if you would like 
         - [x] add cli usage explanation to README
     - [x] display basic errors on front end
     - [x] open pdf in new tab
-- [ ] handle latexmk errors
+- [x] suppress latexmk errors
     - [x] research haskell handle pattern
     - [x] research readert pattern
     - [x] refactor render with ReaderT
-    - [ ] give Render.render an option to suppress latexmk prompts/stdout
+    - [x] give Render.render an option to suppress latexmk prompts/stdout
 - [ ] haskell nvim error highlight plugin
     - [ ] browse reddit
 - [ ] add line numbers to md box. see codeforces
