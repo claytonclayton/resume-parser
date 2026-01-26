@@ -99,7 +99,7 @@ I haven't really written any comments within my code lol, but if you would like 
 
 # TODOs
 ## Backend Roadmap
-- [ ] implement render button. converts from md to latex then either shows the user an error or complete status.
+- [x] implement render button. converts from md to latex then either shows the user an error or complete status.
     - [x] produce parse errors
         - [x] download hoogle cli
         - [x] understand liftM, runMaybeT stackoverflow post 
@@ -114,17 +114,20 @@ I haven't really written any comments within my code lol, but if you would like 
         - [x] add cli usage explanation to README
     - [x] display basic errors on front end
     - [x] open pdf in new tab
-    - [ ] handle latexmk errors
-        - [ ] research haskell handle pattern
-        - [ ] give Render.render an option to suppress latexmk prompts/stdout
-    - [ ] haskell nvim error highlight plugin?
-    - [ ] add line numbers to md box. see codeforces
-- [ ] begin linter
+- [ ] handle latexmk errors
+    - [x] research haskell handle pattern
+    - [x] research readert pattern
+    - [ ] give Render.render an option to suppress latexmk prompts/stdout
+- [ ] haskell nvim error highlight plugin
+    - [ ] browse reddit
+- [ ] add line numbers to md box. see codeforces
 - [ ] begin test suite 
     - [ ] QuickCheck?
     - [ ] unit tests
     - [ ] produce group errors 
     - [ ] implement RemainingLines error
+- [ ] begin linter
+- [ ] convert some latex resume templates into my style
 - [ ] make fast cli
 - [ ] sanitise input
     - [ ] mv Preprocessor.hs Sanitiser.hs
@@ -139,7 +142,6 @@ I haven't really written any comments within my code lol, but if you would like 
 - [ ] fix intro email link
 - [ ] sublists (see julie resume)
 - [ ] block title wrap (see scott resume)
-- [ ] convert some latex resume templates into my style
 - [ ] work on the front end. probs react
     - [ ] get inspired by bearblog github
 - [ ] implement italics, bolds, strikethroughs
@@ -147,6 +149,8 @@ I haven't really written any comments within my code lol, but if you would like 
 - [ ] refactor Generator to use only neccessary amount of optional latex args
       eg. don't use Block{}[][][][]
         - [ ] make fast cli
+- [ ] write tutorial blog
+- [ ] implement orgmode, typst parser
 - [ ] deploy!
 
 ## Features I want
@@ -172,4 +176,7 @@ I haven't really written any comments within my code lol, but if you would like 
 - [ ] choose from a variety of resume templates
 - [ ] be able to convert from md, orgmode and typst
 - [ ] upload images and embed them in resumes
+- [ ] the textbox autodetects sections and blocks and allows you to quickly
+      click and drag them around the place. you can easily do this via copy
+      and pasting but this would be more convenient. 
 
