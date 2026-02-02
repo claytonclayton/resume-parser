@@ -119,17 +119,33 @@ I haven't really written any comments within my code lol, but if you would like 
     - [x] research readert pattern
     - [x] refactor render with ReaderT
     - [x] give Render.render an option to suppress latexmk prompts/stdout
+- [ ] begin job search
+    - [x] mostly finalise software.md
+        - [x] send to dom. ask about orgmode
+    - [ ] make clayton's problems user friendly
+        - [ ] ensure check.sh works on macos
+        - [ ] write readme
+    - [ ] make resume-parser open source! 
+        - [ ] gitignore resume.md, resume.tex, resume.pdf
+        - [ ] purge all senstive files from all commits
 - [ ] haskell nvim error highlight plugin
-    - [ ] browse reddit
-- [ ] add line numbers to md box. see codeforces
+    - [x] browse reddit
+    - [ ] set up hls on another macOS account
 - [ ] begin test suite 
     - [ ] QuickCheck?
     - [ ] unit tests
     - [ ] produce group errors 
     - [ ] implement RemainingLines error
 - [ ] begin linter
-- [ ] convert some latex resume templates into my style
-- [ ] make fast cli
+    - [ ] get inspired by bearblog github
+    - [ ] add line numbers to md box. see codeforces
+    - [ ] markdown syntax highlighting
+    - [ ] spellcheck
+    - [ ] full stops, capital letters
+    - [ ] abbreviation consistency (Dec vs December)
+- [ ] template display
+    - [ ] convert one latex resume templates into my style
+    - [ ] convert another
 - [ ] sanitise input
     - [ ] mv Preprocessor.hs Sanitiser.hs
 - [ ] peruse Competitors githubs
@@ -139,12 +155,10 @@ I haven't really written any comments within my code lol, but if you would like 
     - [ ] markdown-resume
     - [ ] check out markdown real time render web apps
     - [ ] check out typst resume templates
-- [ ] remove gitignored files on all versions of the repo
+- [ ] make fast cli
 - [ ] fix intro email link
 - [ ] sublists (see julie resume)
 - [ ] block title wrap (see scott resume)
-- [ ] work on the front end. probs react
-    - [ ] get inspired by bearblog github
 - [ ] implement italics, bolds, strikethroughs
 - [ ] refactor Grouper with State
 - [ ] refactor Generator to use only neccessary amount of optional latex args
@@ -180,4 +194,7 @@ I haven't really written any comments within my code lol, but if you would like 
 - [ ] the textbox autodetects sections and blocks and allows you to quickly
       click and drag them around the place. you can easily do this via copy
       and pasting but this would be more convenient. 
-
+- [ ] create a mode that allows you to create a dynamic form instead of write md.
+      click buttons that create new sections, dots etc.  
+- [ ] implement inline comments to allow users to jot down informal ideas
+- [ ] implement bold, italics, strikethroughs
