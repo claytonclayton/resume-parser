@@ -133,7 +133,7 @@ I haven't really written any comments within my code lol, but if you would like 
     - [ ] make resume-parser open source! 
         - [x] update resume as per dom's advice
         - [x] purge all senstive files from all commits
-            - [ ] purge resume.md and resume.pdf too
+            - [ ] purge resume.md and resume.pdf too 
         - [ ] gitignore resume.md, resume.tex, resume.pdf
         - [ ] update prefix.tex attribution
         - [ ] update readme
