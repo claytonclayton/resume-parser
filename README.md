@@ -122,12 +122,21 @@ I haven't really written any comments within my code lol, but if you would like 
 - [ ] begin job search
     - [x] mostly finalise software.md
         - [x] send to dom. ask about orgmode
-    - [ ] make clayton's problems user friendly
-        - [ ] ensure check.sh works on macos
-        - [ ] write readme
-    - [ ] make resume-parser open source! 
+    - [x] make clayton's problems user friendly
+        - [x] ensure check.sh works on macos
+            - [x] make bits/stdc file
+        - [x] implement haskell testing
+        - [x] move ianuary to ideas
+        - [x] make sure you can ctrl-c early exit check.sh
+        - [x] write attributions
+        - [x] write readme
+    - [x] make resume-parser open source! 
         - [ ] gitignore resume.md, resume.tex, resume.pdf
-        - [ ] purge all senstive files from all commits
+        - [x] purge all senstive files from all commits
+        - [ ] update readme
+    - [ ] update linked in
+    - [ ] update resume as per dom's advice
+    - [ ] apply for (1) job! 
 - [ ] haskell nvim error highlight plugin
     - [x] browse reddit
     - [ ] set up hls on another macOS account
