@@ -4,8 +4,8 @@ me/aux
 me/friends-resumes
 me/pipeline/pdf
 me/pipeline/tex
-!me/pipeline/pdf/resume.pdf
-!me/pipeline/tex/resume.tex
+#!me/pipeline/pdf/resume.pdf
+#!me/pipeline/tex/resume.tex
 !me/pipeline/tex/prefix.tex
 me/md/*
-!me/md/resume.md
+#!me/md/resume.md
