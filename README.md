@@ -98,7 +98,7 @@ Honestly I think you could just paste my template at ```me/pipeline/tex/resume.t
 I haven't really written any comments within my code lol, but if you would like me to, just ask.  
 
 # TODOs
-## Backend Roadmap
+## Roadmap
 - [x] implement render button. converts from md to latex then either shows the user an error or complete status.
     - [x] produce parse errors
         - [x] download hoogle cli
@@ -130,12 +130,14 @@ I haven't really written any comments within my code lol, but if you would like 
         - [x] make sure you can ctrl-c early exit check.sh
         - [x] write attributions
         - [x] write readme
-    - [x] make resume-parser open source! 
-        - [ ] gitignore resume.md, resume.tex, resume.pdf
+    - [ ] make resume-parser open source! 
+        - [x] update resume as per dom's advice
         - [x] purge all senstive files from all commits
+            - [ ] purge resume.md and resume.pdf too
+        - [ ] gitignore resume.md, resume.tex, resume.pdf
+        - [ ] update prefix.tex attribution
         - [ ] update readme
     - [ ] update linked in
-    - [ ] update resume as per dom's advice
     - [ ] apply for (1) job! 
 - [ ] haskell nvim error highlight plugin
     - [x] browse reddit
@@ -155,8 +157,9 @@ I haven't really written any comments within my code lol, but if you would like 
 - [ ] template display
     - [ ] convert one latex resume templates into my style
     - [ ] convert another
-- [ ] sanitise input
-    - [ ] mv Preprocessor.hs Sanitiser.hs
+- [ ] sanitise/lex input
+    - [ ] mv Preprocessor.hs Sanitiser.hs?
+    - [ ] make symbols like + and ~ look normal
 - [ ] peruse Competitors githubs
     - [ ] rendercv
     - [ ] SmartResume
