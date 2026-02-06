@@ -18,4 +18,4 @@ preprocess = toText . escaper . stripper
     escape c
       | c `elem` escapees = (<>) $ B.singleton '\\' <> B.singleton c 
       | otherwise         = (<>) $ B.singleton c
-    escapees = ['&', '$']
+    escapees = ['&', '$', '%']

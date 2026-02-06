@@ -89,7 +89,7 @@ render md = do
   isQuiet <- asks quietRender
 
   let 
-    argBase =
+    baseArg =
       [ "-pdf"
       , "-auxdir=" ++ auxPath
       , "-outdir=" ++ outPath
@@ -99,7 +99,7 @@ render md = do
       if isQuiet
       then ("-quiet" :)
       else id
-    args = quietArg argBase
+    args = quietArg baseArg
 
   (_, _, _, ph) <- liftIO $ createProcess (proc "latexmk" args)
   exitCode      <- liftIO $ waitForProcess ph
