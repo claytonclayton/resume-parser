@@ -27,3 +27,8 @@
     - this might be downright confusing for users so might change
 - [ ] -tex flag outputs tex
 
+## Parser
+- [ ] too many | throws an error
+
+## Lexer
+- [ ] comments are removed
