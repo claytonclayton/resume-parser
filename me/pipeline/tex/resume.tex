@@ -1,0 +1,181 @@
+%-------------------------
+% Resume in Latex
+% Author : Jake Gutierrez
+% Based off of: https://github.com/sb2nov/resume
+% License : MIT
+%------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{xparse}
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\input{glyphtounicode}
+
+
+%----------FONT OPTIONS----------
+% sans-serif
+% \usepackage[sfdefault]{FiraSans}
+% \usepackage[sfdefault]{roboto}
+% \usepackage[sfdefault]{noto-sans}
+% \usepackage[default]{sourcesanspro}
+
+% serif
+% \usepackage{CormorantGaramond}
+% \usepackage{charter}
+
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-5pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-3pt}]
+
+% Ensure that generate pdf is machine readable/ATS parsable
+\pdfgentounicode=1
+
+%------------------------- Custom commands
+\newcommand{\Dot}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\NewDocumentCommand{\Block}{m O{} O{} O{} O{}}{
+    \vspace{0pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \IfBlankTF{#2}
+      {\textbf{#1} & \textit{\small #3} \\}
+      {\textbf{#1} $|$ \textit{\small#2} & \textit{\small #3} \\}
+      \IfBlankF{#4}
+      {\textit{\small#4} & \textit{\small #5} \\}
+    \end{tabular*}
+    \vspace{-2pt}
+}
+
+\NewDocumentCommand{\SubBlock}{m O{}}{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2}
+    \end{tabular*}
+}
+
+\NewDocumentCommand{\Flat}{m o}{%
+    \IfBlankF{#1}{\small \textbf{#1}:}
+    \small #2 \\
+}
+
+\newcommand{\ResumeTitle}[1]{\textbf{\Huge \scshape #1} \\\vspace{1pt}}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\SectionStart}{\begin{itemize}[leftmargin=0.15in, label={}, itemsep=0pt]}
+\newcommand{\SectionEnd}{\end{itemize}}
+
+\newcommand{\DotStart}{\item\begin{itemize}}
+\newcommand{\DotEnd}{\end{itemize}\vspace{3pt}}
+
+\newcommand{\FlatStart}{\item}
+\newcommand{\FlatEnd}{\vspace{8pt}}
+\begin{document}
+
+\begin{center}
+    \ResumeTitle{Ashley Clayton}
+    \small \underline{\url{ashley.clayton2600@gmail.com}} $|$ \underline{\url{https://www.linkedin.com/in/ashley-clayton-a68a9523a}} $|$ \underline{\url{https://github.com/claytonclayton}}
+\end{center}
+
+\section{Education}
+\SectionStart
+    \Block
+        {University of New South Wales}[][Kensington, Sydney][Bachelor of Computer Science][Feb 2022 – Dec 2024]
+    \Block
+        {University of Technology Sydney}[][Chippendale, Sydney][Bachelor of Computer Science - Undergraduate IT Dean's List][Feb 2021 - Dec 2021]
+\SectionEnd
+
+\section{Work Experience}
+\SectionStart
+    \Block
+        {Lab Demonstrator}[][Feb 2024 - Present][COMP3121 - Algorithm Design and Analysis, COMP4128 - Programming Challenges][UNSW]
+    \DotStart
+        \Dot{Attained a student approval rating 10\% higher than that of my peers, by tailoring explanations to student ability and clarifying conventions for academic algorithmic proof writing.}
+        \Dot{Contributed original problems to 66\% of COMP4128 (2024) assessable exams by showcasing three competitive programming problems spanning distinct algorithmic paradigms and validating solution approaches with tutors.}
+    \DotEnd
+
+    \Block
+        {Problem Setter, Judge}[][May 2025 - Sep 2025][Prog Comp][UNSW]
+    \DotStart
+        \Dot{Proposed, developed and adjudicated problems as a contracted problem setter for a statewide, high school competitive programming competition involving more than 120 teams.}
+        \Dot{Diagnosed and resolved a live contest issue by reverting affected Git commits and issuing clarification notes to teams onsite.}
+    \DotEnd
+
+\SectionEnd
+
+\section{Volunteering}
+\SectionStart
+    \Block
+        {Director of Competitions}[][Nov 2023 - Dec 2025][CPMSoc - Competitive Programming and Mathematics Society][UNSW]
+    \DotStart
+        \Dot{Increased society funding by \$2000 per trimester by organising sponsored competitions in collaboration with IMC, Citadel Securities, and Jane Street, facilitating recruiter–student engagement.}
+        \Dot{Assumed primary responsibility for contest delivery while the co-director was on exchange, more than doubling personal problem-writing output and overseeing testing, scheduling and prize acquisition for the 2024 Term 3 Programming and Mathematics O-Week Contest.}
+    \DotEnd
+
+\SectionEnd
+
+\section{Projects}
+\SectionStart
+    \Block
+        {Resume Parser}[Haskell, Megaparsec, LaTeX, React][Oct 2025 - Present][][]
+    \DotStart
+        \Dot{Developing a web application and Cli that parses and transpiles a Markdown sub-language into Latex to create aesthetically pleasing resume PDFs.}
+        \Dot{Utilises ParsecT, ReaderT and ExceptT monad transformer stacks to constrain effects and explicitly model syntax and runtime errors, improving correctness and testability.}
+    \DotEnd
+
+    \Block
+        {Clayton’s Problems}[C++, Bash, Python, Haskell][Feb 2024 - Dec 2025][][]
+    \DotStart
+        \Dot{https://github.com/claytonclayton/claytons-problems}
+        \Dot{Curated a collection of 25 original competitive programming problems, including statements, solutions, explanations, and randomised test case generation and validation.}
+        \Dot{Built a Bash-based evaluation tool to visualise accepted, incorrect, and time limit exceeded submissions across C, C++, Python, and Haskell solutions.}
+    \DotEnd
+
+\SectionEnd
+
+\section{Technical Skills}
+\SectionStart
+    \FlatStart
+        \Flat{Languages}[Haskell, C/C++, Python, Bash, Java, Typescript, LaTeX, PostgreSQL, MIPS Assembly]
+        \Flat{Libraries}[testlib, Megaparsec, matplotlib, React]
+        \Flat{Developer Tools}[Git, Docker, neovim, Ubuntu]
+    \FlatEnd
+
+\SectionEnd
+
+\end{document}
+

@@ -1,7 +1,6 @@
 .stack-work/
 *~
-me/aux/*
-!me/aux/.gitkeep
+me/aux
 me/friends-resumes
 me/pipeline/pdf
 me/pipeline/tex
@@ -10,4 +9,3 @@ me/pipeline/tex
 !me/pipeline/tex/prefix.tex
 me/md/*
 !me/md/resume.md
-me/test.hs
