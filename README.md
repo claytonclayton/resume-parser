@@ -1,7 +1,7 @@
 # The Project!
 The goal is to make a website where you can type out your resume in markdown and then have it be converted into a pretty resume pdf. To see an example of a markdown input check out ```me/md/resume.md```, and to see its pdf counterpart check out ```me/pipeline/pdf/resume.pdf```.
 
-Below is me trying my best to quickly explain the features I am working towards, and how get started as soon as possible.
+Below is me trying my best to quickly explain the features I am working towards.
 
 ## Features
 Here are the main features I am working towards in order of importance:
@@ -133,12 +133,13 @@ I haven't really written any comments within my code lol, but if you would like 
     - [ ] make resume-parser open source! 
         - [x] update resume as per dom's advice
         - [x] purge all senstive files from all commits
-            - [ ] purge resume.md and resume.pdf too 
-        - [ ] gitignore resume.md, resume.tex, resume.pdf
+            - [x] purge resume.md and resume.pdf too 
+        - [x] gitignore resume.md, resume.tex, resume.pdf
         - [ ] update prefix.tex attribution
         - [ ] update readme
-    - [ ] update linked in
-    - [ ] apply for (1) job! 
+        - [ ] make repo public!
+    - [x] update linked in
+    - [x] apply for (1) job! 
 - [ ] haskell nvim error highlight plugin
     - [x] browse reddit
     - [ ] set up hls on another macOS account
@@ -178,6 +179,9 @@ I haven't really written any comments within my code lol, but if you would like 
         - [ ] make fast cli
 - [ ] write tutorial blog
 - [ ] implement orgmode, typst parser
+- [ ] choose name. 
+    - something evil: wrath, boast, vanity
+    - camperdown, lansdowne, downfall, touchdown, sundown
 - [ ] deploy!
 
 ## Features I want
@@ -210,3 +214,7 @@ I haven't really written any comments within my code lol, but if you would like 
       click buttons that create new sections, dots etc.  
 - [ ] implement inline comments to allow users to jot down informal ideas
 - [ ] implement bold, italics, strikethroughs
+- [ ] change the name of the project!
+    - I want something with a slight negative connotation to reflect our negative feelings about resumes in general
+    - Something like "WRATH", like we're using our anger to get back at the system 
+    - super stylised font in a 16 bit style. like hyper light drifter
